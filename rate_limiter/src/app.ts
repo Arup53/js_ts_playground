@@ -9,4 +9,4 @@ app.get("/", rateLimiter, async (req: Request, res: Response) => {
   return res.json({ message: "Hello" });
 });
 
-app.listen(PORT, () => console.log(`Server is listing on PORT ${PORT}`));
+export default app;
