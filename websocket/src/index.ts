@@ -6,8 +6,9 @@ wss.on("connection", (ws) => {
   ws.send("Connected to websocket server");
 
   ws.on("message", (message) => {
-    console.log("Recived", message);
-    ws.send(`Server received:,${message}`);
+    const text = message.toString();
+    console.log("Recived", text);
+    ws.send(`Server received:,${text}`);
   });
 
   ws.on("close", () => {
