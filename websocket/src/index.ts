@@ -7,6 +7,11 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     const text = message.toString();
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(`Broadcast: ${message}`);
+      }
+    });
     console.log("Recived", text);
     ws.send(`Server received:,${text}`);
   });
