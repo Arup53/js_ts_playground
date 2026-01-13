@@ -16,7 +16,7 @@ class OrderManager {
     this.orders = [];
   }
 
-  async CreateOrder(user_id: any, items: any, total_amount: any) {
+  async createOrder(user_id: any, items: any, total_amount: any) {
     const order: Order = {
       id: `ORD-${Date.now()}`,
       user_id,
