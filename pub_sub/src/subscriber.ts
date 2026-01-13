@@ -20,4 +20,4 @@ async function startSubscriber() {
   });
 }
 
-startSubscriber().catch(console.error);
+export default startSubscriber;
