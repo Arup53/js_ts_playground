@@ -27,7 +27,7 @@ class orderManager {
     };
 
     this.orders.push(order);
-    console.log(`✅ Order created: ${order.id}`);
+    console.log(`Order created: ${order.id}`);
 
     await redisPublisher.Publish("order:created", {
       order_id: order.id,

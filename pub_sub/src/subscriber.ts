@@ -15,6 +15,9 @@ async function startSubscriber() {
   await subscriber.subscribe("notifications", (message) => {
     console.log("Received message:", message);
   });
+  await subscriber.subscribe("order:created", (message) => {
+    console.log("Received order:", message);
+  });
 }
 
 startSubscriber().catch(console.error);
