@@ -9,7 +9,7 @@ interface Order {
   created_at: string;
 }
 
-class orderManager {
+class OrderManager {
   private orders: Order[];
 
   constructor() {
@@ -38,4 +38,4 @@ class orderManager {
   }
 }
 
-export default orderManager;
+export default OrderManager;
