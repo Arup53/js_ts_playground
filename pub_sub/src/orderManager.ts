@@ -37,3 +37,5 @@ class orderManager {
     });
   }
 }
+
+export default orderManager;
