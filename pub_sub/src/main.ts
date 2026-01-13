@@ -3,12 +3,12 @@ import { redisPublisher } from "./publisher";
 import startSubscriber from "./subscriber";
 
 async function main() {
-  redisPublisher.Connect();
+  await startSubscriber().catch(console.error);
+  console.log("subscriber connected");
+  await redisPublisher.Connect();
   console.log("Connected to Redis Publisher");
   const orderManager = new OrderManager();
   console.log("Order manager object created");
-  startSubscriber().catch(console.error);
-  console.log("subscriber connected");
 
   console.log("\n--- Creating Orders ---\n");
 
@@ -21,3 +21,5 @@ async function main() {
     1059.97
   );
 }
+
+main();
