@@ -27,7 +27,7 @@ class RedisPubliser {
     this.isConnected = false;
   }
 
-  async Connect() {
+  async connect() {
     if (this.isConnected) {
       return;
     }
@@ -46,9 +46,9 @@ class RedisPubliser {
     console.log("Publisher conencted to Redis");
   }
 
-  async Publish(channel: any, message: any) {
+  async publish(channel: any, message: any) {
     if (!this.isConnected) {
-      await this.Connect();
+      await this.connect();
     }
 
     // // object may be nul solution 2 --- type guard

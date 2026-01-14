@@ -5,9 +5,9 @@ import startSubscriber from "./subscriber";
 async function main() {
   await startSubscriber().catch(console.error);
   console.log("subscriber connected");
-  await redisPublisher.Connect();
+  await redisPublisher.connect();
   console.log("Connected to Redis Publisher");
-  const orderManager = new OrderManager();
+  const orderManager = new OrderManager(redisPublisher);
   console.log("Order manager object created");
 
   console.log("\n--- Creating Orders ---\n");

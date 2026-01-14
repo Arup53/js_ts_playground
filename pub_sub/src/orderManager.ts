@@ -33,7 +33,7 @@ class OrderManager {
     this.orders.push(order);
     console.log(`Order created: ${order.id}`);
 
-    await this.publisher.Publish("order:created", {
+    await this.publisher.publish("order:created", {
       order_id: order.id,
       order_userId: order.user_id,
       total_amount: order.total_amount,
