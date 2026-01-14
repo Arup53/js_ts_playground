@@ -4,9 +4,9 @@ import RedisPubliser from "./publisher";
 
 interface Order {
   id: string;
-  user_id: any;
+  user_id: string;
   items: any;
-  total_amount: any;
+  total_amount: number;
   status: string;
   created_at: string;
 }
@@ -20,7 +20,7 @@ class OrderManager {
     this.orders = [];
   }
 
-  async createOrder(user_id: any, items: any, total_amount: any) {
+  async createOrder(user_id: string, items: any, total_amount: number) {
     const order: Order = {
       id: `ORD-${Date.now()}`,
       user_id,
