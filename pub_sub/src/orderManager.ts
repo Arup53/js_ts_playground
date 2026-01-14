@@ -1,4 +1,6 @@
-import { redisPublisher } from "./publisher";
+// import { redisPublisher } from "./publisher";
+
+import RedisPubliser from "./publisher";
 
 interface Order {
   id: string;
@@ -11,8 +13,10 @@ interface Order {
 
 class OrderManager {
   private orders: Order[];
+  publisher: RedisPubliser;
 
-  constructor() {
+  constructor(publisher: RedisPubliser) {
+    this.publisher = publisher;
     this.orders = [];
   }
 
@@ -29,7 +33,7 @@ class OrderManager {
     this.orders.push(order);
     console.log(`Order created: ${order.id}`);
 
-    await redisPublisher.Publish("order:created", {
+    await this.publisher.Publish("order:created", {
       order_id: order.id,
       order_userId: order.user_id,
       total_amount: order.total_amount,

@@ -73,5 +73,5 @@ class RedisPubliser {
     }
   }
 }
-
+export default RedisPubliser;
 export const redisPublisher = new RedisPubliser();
