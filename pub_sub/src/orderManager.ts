@@ -40,6 +40,16 @@ class OrderManager {
       timestamp: order.created_at,
     });
   }
+  async confirmOrder(order: Order, status: string) {
+    order.status = status;
+    console.log("Order status is changed to", status);
+
+    await this.publisher.publish("order:confirm", {
+      order_id: order.id,
+      order_userId: order.user_id,
+      status: order.status,
+    });
+  }
 }
 
 export default OrderManager;
