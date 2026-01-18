@@ -65,7 +65,6 @@ class TaskConsumer {
       ` Worker ${this.workerId} completed: ${task.order_id} (${processingTime}ms)`
     );
   }
-
   async stop() {
     this.isRunning = false;
     if (this.client) {
