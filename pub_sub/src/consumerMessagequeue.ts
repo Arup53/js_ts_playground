@@ -1,5 +1,4 @@
 import { RedisClientType, createClient } from "redis";
-import TaskProducer from "./publiserMessagequeue";
 
 interface Task {
   order_id: string;
@@ -8,11 +7,11 @@ interface Task {
 }
 
 class TaskConsumer {
-  private workerId: string;
+  private workerId: number;
   private client: RedisClientType | null = null;
   private isRunning: boolean;
 
-  constructor(workerId: string) {
+  constructor(workerId: number) {
     this.workerId = workerId;
     this.client = null;
     this.isRunning = false;
@@ -30,7 +29,7 @@ class TaskConsumer {
     });
 
     await this.client.connect();
-    console.log("worker connected succesfully");
+    console.log("worker connected succesfully and id is", this.workerId);
   }
 
   async startConsuming(queueName: string) {
@@ -75,4 +74,4 @@ class TaskConsumer {
   }
 }
 
-export default TaskProducer;
+export default TaskConsumer;
