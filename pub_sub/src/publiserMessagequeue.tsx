@@ -1,5 +1,11 @@
 import { RedisClientType, createClient } from "redis";
 
+interface Task {
+  order_id: string;
+  action: string;
+  amount: number;
+}
+
 class TaskProducer {
   private client: RedisClientType | null = null;
 
@@ -20,7 +26,7 @@ class TaskProducer {
     console.log("Redis client connected succesfully");
   }
 
-  async addTask(queueName: string, task) {
+  async addTask(queueName: string, task: Task) {
     const taskData = typeof task === "object" ? JSON.stringify(task) : task;
 
     const queueSize = await this.client?.lPush(queueName, taskData);
