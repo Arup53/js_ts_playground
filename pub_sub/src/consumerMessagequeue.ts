@@ -1,4 +1,5 @@
 import { RedisClientType, createClient } from "redis";
+import TaskProducer from "./publiserMessagequeue";
 
 interface Task {
   order_id: string;
@@ -73,3 +74,5 @@ class TaskConsumer {
     }
   }
 }
+
+export default TaskProducer;
