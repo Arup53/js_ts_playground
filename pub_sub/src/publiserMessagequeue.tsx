@@ -14,6 +14,8 @@ class TaskProducer {
   }
 
   async connect() {
+    if (this.client) return;
+
     this.client = createClient({
       url: "redis://localhost:6379",
     });
@@ -31,5 +33,12 @@ class TaskProducer {
 
     const queueSize = await this.client?.lPush(queueName, taskData);
     console.log(`Task pushed in ${queueName} & size of queue is ${queueSize}`);
+  }
+
+  async disconnect() {
+    if (this.client) {
+      await this.client?.quit();
+      console.log("Redis publisher client is disconnected");
+    }
   }
 }
