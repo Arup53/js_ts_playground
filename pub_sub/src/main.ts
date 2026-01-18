@@ -46,14 +46,21 @@ async function main() {
 
   console.log("\n All tasks added to queue");
 
-  for (let i = 1; i <= numWorkers; i++) {
-    const worker = new TaskConsumer(i);
-    await worker.connect();
-    workers.push(worker);
+  // for (let i = 1; i <= numWorkers; i++) {
+  //   const worker = new TaskConsumer(i);
+  //   await worker.connect();
+  //   workers.push(worker);
 
-    // Start consuming in parallel (don't await here)
-    worker.startConsuming("order:processing");
-  }
+  //   // Start consuming in parallel (don't await here)
+  //   worker.startConsuming("order:processing");
+  // }
+
+  // ------------ single worker --------------
+  const worker = new TaskConsumer(1);
+  await worker.connect();
+  workers.push(worker);
+
+  await worker.startConsuming("order:processing");
 
   process.on("SIGINT", async () => {
     console.log("\n\nShutting down workers...");
