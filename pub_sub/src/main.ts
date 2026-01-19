@@ -46,6 +46,7 @@ async function main() {
 
   console.log("\n All tasks added to queue");
 
+  // --------- multiple worker ----------
   // for (let i = 1; i <= numWorkers; i++) {
   //   const worker = new TaskConsumer(i);
   //   await worker.connect();
