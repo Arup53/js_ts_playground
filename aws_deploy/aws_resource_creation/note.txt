@@ -1,0 +1,5 @@
+-------------- AWS LAMBDA --------- 
+just go to lambda and create function and in top dashboard from function overview click add trigger and create api gateway
+test by curl  curl -X POST https://your-api-url.amazonaws.com/default/MyPostAPI \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John", "age": 30}'
