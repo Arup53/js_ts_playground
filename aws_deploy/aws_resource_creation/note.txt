@@ -9,3 +9,9 @@ test by curl  curl -X POST https://your-api-url.amazonaws.com/default/MyPostAPI 
 -------- AWS SNS --------- 
 1. CREATE TOPIC
 2. CREATE SUBSCRITPTIONS
+
+-------- AWS SQS ---------
+1. CREATE QUEUE
+2. CREATE SQS SUBSCRIPTON IN SNS AND USE SPECEFIC SQS ARN
+3. IN SQS CLICK SNS SUBSCRIPTON AND CLIK SUBSCRIBE TO SNS TOPIC
+4. DONE
