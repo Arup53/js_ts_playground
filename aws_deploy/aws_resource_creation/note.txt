@@ -3,3 +3,9 @@ just go to lambda and create function and in top dashboard from function overvie
 test by curl  curl -X POST https://your-api-url.amazonaws.com/default/MyPostAPI \
   -H "Content-Type: application/json" \
   -d '{"name": "John", "age": 30}'
+
+
+
+-------- AWS SNS --------- 
+1. CREATE TOPIC
+2. CREATE SUBSCRITPTIONS
