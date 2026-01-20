@@ -15,3 +15,26 @@ test by curl  curl -X POST https://your-api-url.amazonaws.com/default/MyPostAPI 
 2. CREATE SQS SUBSCRIPTON IN SNS AND USE SPECEFIC SQS ARN
 3. IN SQS CLICK SNS SUBSCRIPTON AND CLIK SUBSCRIBE TO SNS TOPIC
 4. DONE
+
+
+------------ PERMISSION -------- 
+1. GO TO LAMBDA CONFIGURE AND CLICK PERMISSION
+2. CLICK EXECUTION ROLE NAME --> GO TO THE JSON EDITOR AND EDIT FOR SNS PUSHING FROM LAMBDA AND PASTE THE FOLLOWING
+ {
+            "Effect": "Allow",
+            "Action": "sns:Publish",
+            "Resource": "arn:aws:sns:ap-southeast-1:325899476249:customerIoTest"
+        }
+3. FOR LAMBDA WITH SQS SUBSCRIBER ADD PERMISSION FIRST BEFORE ADDING trigger
+{
+			"Effect": "Allow",
+			"Action": [
+				"sqs:ReceiveMessage",
+				"sqs:DeleteMessage",
+				"sqs:GetQueueAttributes"
+			],
+			"Resource": "arn:aws:sqs:ap-southeast-1:325899476249:customerIoQueue"
+		}
+
+OR, FROM VISUAL SELECT SQS
+ 
