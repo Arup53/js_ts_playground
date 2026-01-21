@@ -35,7 +35,6 @@ export const handler = async (event, context) => {
     const snsResponse = await snsClient.send(publishCommand);
     console.log("SNS Message ID:", snsResponse.MessageId);
 
-    // Return success response
     return {
       statusCode: 200,
       headers: {
