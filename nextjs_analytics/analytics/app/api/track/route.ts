@@ -57,6 +57,7 @@ export async function POST(request: Request) {
 
     console.log("━".repeat(60));
     console.log(`📈 Total events stored: ${events.length}\n`);
+    console.log("events array", event);
 
     return NextResponse.json({
       success: true,

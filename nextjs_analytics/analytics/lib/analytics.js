@@ -4,7 +4,7 @@ class Analytics {
     this.sessionId = null;
     this.endpoint = "/api/track";
     this.isIntialized = false;
-
+    this.lastTrackedPath = null;
     this.queue = [];
   }
 
@@ -48,7 +48,7 @@ class Analytics {
     let sessionId = sessionStorage.getItem("analytics_session_id");
     if (!sessionId) {
       sessionId = this.generateId();
-      sessionStorage.setItem(sessionId);
+      sessionStorage.setItem("analytics_session_id", sessionId);
     }
     return sessionId;
   }
@@ -88,17 +88,34 @@ class Analytics {
   }
 
   trackPageView() {
+    const currentPath = location.pathname + location.search;
+
+    // Prevent tracking the same page multiple times in quick succession
+    if (this.lastTrackedPath === currentPath) {
+      return;
+    }
+
+    this.lastTrackedPath = currentPath;
     this.track("pageview", {
       page: location.pathname,
       title: document.title,
       url: location.href,
     });
   }
-
   processQueue() {
-    while (this.queue.length > 0) {
+    let count = 0;
+    const maxProcessed = 100; // Safety limit
+
+    while (this.queue.length > 0 && count < maxProcessed) {
       const { eventName, properties } = this.queue.shift();
       this.track(eventName, properties);
+      count++;
+    }
+
+    if (this.queue.length > 0) {
+      console.warn(
+        `Analytics queue still has ${this.queue.length} events after processing ${maxProcessed}`
+      );
     }
   }
 
@@ -138,21 +155,21 @@ class Analytics {
     });
 
     // Track visibility changes (tab focus/blur)
-    document.addEventListener("visibilitychange", () => {
-      this.track("visibility", {
-        state: document.visibilityState,
-        hidden: document.hidden,
-      });
-    });
+    // document.addEventListener("visibilitychange", () => {
+    //   this.track("visibility", {
+    //     state: document.visibilityState,
+    //     hidden: document.hidden,
+    //   });
+    // });
 
-    window.addEventListener("beforeunload", () => {
-      const timeOnPage = performance.now();
+    // window.addEventListener("beforeunload", () => {
+    //   const timeOnPage = performance.now();
 
-      this.track("page_exit", {
-        timeOnPage,
-        scrollDepth: maxScroll,
-      });
-    });
+    //   this.track("page_exit", {
+    //     timeOnPage,
+    //     scrollDepth: maxScroll,
+    //   });
+    // });
 
     //  SPA navigation
     const originalPushState = history.pushState;

@@ -14,5 +14,12 @@ export default function UpgradeButton() {
     window.location.href = "/checkout";
   };
 
-  return <button onClick={handleUpgrade}>Upgrade to Pro</button>;
+  return (
+    <button
+      className="bg-white text-black cursor-pointer"
+      onClick={handleUpgrade}
+    >
+      Upgrade to Pro
+    </button>
+  );
 }
