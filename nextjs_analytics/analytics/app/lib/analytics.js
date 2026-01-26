@@ -205,3 +205,7 @@ class Analytics {
 const analytics = new Analytics();
 
 export default analytics;
+
+if (typeof window !== "undefined") {
+  window.analytics = analytics;
+}
