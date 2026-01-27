@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AnalyticsInitializer from "./components/AnalyticsInitializer";
+import { AnalyticsProvider } from "./providers/AnalyticsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +29,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AnalyticsInitializer />
-        {children}
+        {/* <AnalyticsInitializer /> */}
+        <AnalyticsProvider
+          apiKey={process.env.NEXT_PUBLIC_ANALYTICS_API_KEY!}
+          batchSize={15} // Send when 15 events queued
+          flushInterval={3000} // Flush every 3 seconds
+        >
+          {children}
+        </AnalyticsProvider>
       </body>
     </html>
   );

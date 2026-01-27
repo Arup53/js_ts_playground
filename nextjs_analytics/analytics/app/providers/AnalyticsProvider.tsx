@@ -8,23 +8,32 @@ const AnalyticsContext = createContext<AnalyticsClient | null>(null);
 export function AnalyticsProvider({
   children,
   apiKey,
-  batchSize = 10,
-  flushInterval = 5000,
 }: {
   children: ReactNode;
   apiKey: string;
-  batchSize?: number;
-  flushInterval?: number;
 }) {
-  const analytics = initializeAnalytics(apiKey, { batchSize, flushInterval });
+  const analytics = initializeAnalytics(apiKey);
 
   useEffect(() => {
     // Auto-track page views on route changes
     analytics.page();
 
-    // Cleanup on unmount
+    // Flush pending requests before page unload
+    const handleBeforeUnload = () => {
+      // Use sendBeacon for guaranteed delivery on page unload
+      const status = analytics.getQueueStatus();
+      if (status.queued > 0 || status.pending > 0) {
+        // Attempt to flush (best effort)
+        analytics.flush().catch(() => {
+          // Silently fail - user is leaving anyway
+        });
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      analytics.destroy();
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [analytics]);
 
