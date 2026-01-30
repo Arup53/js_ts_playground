@@ -2,7 +2,7 @@ import pool, { query } from "./config/db/db";
 
 async function main() {
   try {
-    console.log("🚀 Starting application...\n");
+    console.log(" Starting application...\n");
 
     const res = await query(`
       CREATE TABLE usersNEW(
@@ -14,11 +14,11 @@ async function main() {
 
     console.log("table is created", res);
   } catch (error) {
-    console.error("❌ Error:", error);
+    console.error(" Error:", error);
   } finally {
     // Close the pool
     await pool.end();
-    console.log("\n👋 Database connection closed");
+    console.log("\n Database connection closed");
   }
 }
 
