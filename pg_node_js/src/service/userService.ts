@@ -1,5 +1,5 @@
 import { query } from "../config/db/db";
-import { CreateUser, User } from "../models/User";
+import { CreateUser, User } from "../models/Model";
 
 class UserService {
   async createUser(userData: CreateUser): Promise<User> {
