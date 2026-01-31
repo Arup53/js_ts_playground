@@ -31,3 +31,12 @@ CREATE TABLE users (
 
   PRIMARY KEY (tenant_id, user_id)
 );
+
+CREATE TABLE events (
+  id              BIGSERIAL PRIMARY KEY,
+  tenant_id       TEXT NOT NULL,
+  person_id       BIGINT REFERENCES persons(id),
+  event           TEXT NOT NULL,
+  properties      JSONB,
+  timestamp       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
