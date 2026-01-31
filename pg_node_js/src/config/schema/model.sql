@@ -24,8 +24,10 @@ CREATE TABLE anonymous_ids (
 );
 
 CREATE TABLE users (
-  tenant_id       TEXT NOT NULL PRIMARY KEY,
-  user_id         TEXT NOT NULL PRIMARY KEY,
-  created_at      TIMESTAMP,
-  updated_at      TIMESTAMP,
+  tenant_id       TEXT NOT NULL,
+  user_id         TEXT NOT NULL,
+  created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (tenant_id, user_id)
 );
