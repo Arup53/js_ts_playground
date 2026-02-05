@@ -1,1 +1,6 @@
-console.log("Hello via Bun!");
+
+async function main() {
+    
+}
+
+main()
