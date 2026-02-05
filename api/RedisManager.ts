@@ -4,7 +4,6 @@ export class RedisManager {
   private client: RedisClientType;
   private static instance: RedisManager;
   private static connecting: Promise<void>;
-
   private constructor() {
     this.client = createClient({
       url: "redis://localhost:6379",
