@@ -1,4 +1,4 @@
-# backend
+# js_ts_playground
 
 To install dependencies:
 

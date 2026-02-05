@@ -1,14 +1,14 @@
 import { createClient, type RedisClientType } from "redis";
 
 export class RedisManager {
-  private client: RedisClientType;
+  private publisher: RedisClientType;
   private static instance: RedisManager;
   private static connecting: Promise<void>;
   private constructor() {
-    this.client = createClient({
-      url: "redis://localhost:6379",
+    this.publisher = createClient({
+      url: process.env.REDIS_URL,
     });
-    RedisManager.connecting = this.client.connect();
+    RedisManager.connecting = this.publisher.connect();
   }
 
   public static async getInstance() {
@@ -23,7 +23,7 @@ export class RedisManager {
 
   public async addEventInQueue(event: any) {
     try {
-      const size = await this.client.lPush(
+      const size = await this.publisher.lPush(
         "event_queue",
         JSON.stringify(event)
       );
