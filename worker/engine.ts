@@ -65,7 +65,14 @@ function matchCampaigns(event, campaigns) {
     if (campaign.trigger.event !== Object.keys(campaigns_Map))
       campaigns_Map[campaign.trigger.event] = campaign;
   }
-  console.log(campaigns_Map);
+
+  let matched = [];
+  for (const [key, value] of Object.entries(campaigns_Map)) {
+    if (key === event.event) {
+      matched.push(value);
+    }
+  }
+  console.log(matched);
 }
 
 // async function process(campaign, event) {
