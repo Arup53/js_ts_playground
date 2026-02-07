@@ -23,6 +23,11 @@ const campaigns = [
     trigger: {
       event: "sign_up",
     },
+    actions: [
+      { channel: "sms", template_id: "s3bucketjigna" },
+      { channel: "slack", template_id: "ks3bucketjigna" },
+      { channel: "email", template_id: "es3bucketjigna" },
+    ],
   },
   {
     campaign_id: 2,
@@ -72,19 +77,31 @@ function matchCampaigns(event, campaigns) {
       matched.push(value);
     }
   }
-  console.log(matched);
+  console.log(matched.length);
+
+  return matched;
 }
 
-// async function process(campaign, event) {
-//   if (campaign.status === Status.Completed) {
-//     return "campaign completed";
-//   }
-//   if (!event.person_id) {
-//     return "No anonymous event processing";
-//   }
+async function process(matched_campaigns) {
+  // if (campaign.status === Status.Completed) {
+  //   return "campaign completed";
+  // }
+  // if (!event.person_id) {
+  //   return "No anonymous event processing";
+  // }
+  // if (event.event === campaign.trigger.eventName) {
+  // }
 
-//   if (event.event === campaign.trigger.eventName) {
-//   }
-// }
+  // o(n*m) is acceptable here because matched_campaigns will not be 1M; it will always be a low number
+  for (const campaign of matched_campaigns) {
+    for (const action of campaign.actions) {
+      console.log(
+        " publisher.publish(" + action.channel + "," + "JSON.stringfy(",
+        action.template_id + ")" + ")"
+      );
+    }
+  }
+}
 
-matchCampaigns(event, campaigns);
+// matchCampaigns(event, campaigns);
+process(matchCampaigns(event, campaigns));
