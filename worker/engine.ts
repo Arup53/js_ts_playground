@@ -77,12 +77,11 @@ function matchCampaigns(event, campaigns) {
       matched.push(value);
     }
   }
-  console.log(matched.length);
 
   return matched;
 }
 
-async function process(matched_campaigns) {
+async function process(matched_campaigns, event) {
   // if (campaign.status === Status.Completed) {
   //   return "campaign completed";
   // }
@@ -91,17 +90,20 @@ async function process(matched_campaigns) {
   // }
   // if (event.event === campaign.trigger.eventName) {
   // }
+  const { person_id } = event;
 
   // o(n*m) is acceptable here because matched_campaigns will not be 1M; it will always be a low number
   for (const campaign of matched_campaigns) {
     for (const action of campaign.actions) {
       console.log(
-        " publisher.publish(" + action.channel + "," + "JSON.stringfy(",
-        action.template_id + ")" + ")"
+        JSON.stringify({
+          person_id,
+          template: action.template_id,
+        })
       );
     }
   }
 }
 
 // matchCampaigns(event, campaigns);
-process(matchCampaigns(event, campaigns));
+process(matchCampaigns(event, campaigns), event);
