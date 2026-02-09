@@ -9,7 +9,7 @@ export enum Channel {
   "email",
   "slack",
 }
-export interface Actions {
+export interface Action {
   channel: Channel;
   message: string;
 }
@@ -28,7 +28,7 @@ export enum Frequency {
   "one_time",
 }
 
-export interface Campaigns {
+export interface Campaign {
   tenant_id: number;
   campaign_id: number;
   campaign_name: string;
@@ -48,7 +48,7 @@ export interface TriggerRule {
 }
 
 export interface CampaignActions {
-  actions: Actions[];
+  actions: Action[];
 }
 
 export interface filter {

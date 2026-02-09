@@ -3,7 +3,13 @@
 //   Completed = "COMPLETED",
 // }
 
-import type { Action, CampaignActions } from "./src/engine/types/types";
+import Publisher from "./publisher";
+import {
+  Frequency,
+  type Action,
+  type Campaign,
+  type CampaignActions,
+} from "./types/types";
 
 // interface Campaigns {
 //   camp_id: string;
@@ -109,7 +115,9 @@ import type { Action, CampaignActions } from "./src/engine/types/types";
 
 // // matchCampaigns(event, campaigns);
 // process(matchCampaigns(event, campaigns), event);
-const tenant_id='acme' // this will be this.tenant_id after class implemention
+const tenant_id = "acme"; // this will be this.tenant_id after class implemention
+
+const publisher = new Publisher();
 
 let matched_campagins = [];
 
@@ -125,14 +133,28 @@ function matchCampaigns(event, activeCampaigns) {
 }
 
 function processMatchedCampaigns(event, matched_campagins) {
-  matched_campagins.forEach((campaign) => {
-    campaign.actions.forEach((action: Action) => {
-      if (campaign.trigger.conditions.base_condition) {
-        publisher.publish(action.channel, JSON.stringify({message:action.message, user_id:event.user_id , tenant_id:tenant_id}));
-      }
-      else if (campaign.trigger.conditions.)
+  matched_campagins.forEach((campaign: Campaign) => {
+    campaign.actions.action.forEach((action: Action) => {
+      campaign.trigger.conditions.forEach((condition) => {
+        if (
+          condition.base_condition &&
+          campaign.frequency === 1 &&
+          !Object.hasOwn(campaign.entries_customers, event.user_id)
+        ) {
+          publisher.publish(
+            action.channel,
+            JSON.stringify({
+              message: action.message,
+              user_id: event.user_id,
+              tenant_id: tenant_id,
+            })
+          );
+
+          campaign.entries_customers[event.user_id] = "subscribed";
+        } else if (condition.segment_filter) {
+        } else if (condition.attrubute_filter) {
+        }
+      });
     });
   });
 }
-
-
