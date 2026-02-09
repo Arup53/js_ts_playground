@@ -4,10 +4,14 @@ export enum CamapaignTypes {
   "segment",
 }
 
-export enum Actions {
+export enum Channel {
   "sms",
   "email",
   "slack",
+}
+export interface Actions {
+  channel: Channel;
+  message: string;
 }
 
 export enum Operator {

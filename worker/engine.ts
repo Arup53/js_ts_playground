@@ -108,15 +108,25 @@
 // // matchCampaigns(event, campaigns);
 // process(matchCampaigns(event, campaigns), event);
 
-let matchedCampagins = [];
+let matched_campagins = [];
 
 function fethActiveCampaigns(tenant_id) {}
 
 function matchCampaigns(event, activeCampaigns) {
   for (const campaign of activeCampaigns) {
     if (event.event === activeCampaigns.trigger.event_name) {
-      matchedCampagins.push(activeCampaigns);
+      matched_campagins.push(activeCampaigns);
     }
   }
   return matchCampaigns;
+}
+
+function processMatchedCampaigns(event, matched_campagins) {
+  matched_campagins.forEach((campaign) => {
+    campaign.actions.forEach((action) => {
+      if (campaign.trigger.conditions.base_condition) {
+        publisher.publish(action);
+      }
+    });
+  });
 }
