@@ -32,6 +32,16 @@ export interface Entries {
   [key: number]: string;
 }
 
+export interface EventProperties {}
+
+export interface Event {
+  tenant_id: number;
+  anonymous_id: number;
+  user_id?: number;
+  event: string;
+  properties: EventProperties;
+}
+
 export interface Campaign {
   tenant_id: number;
   campaign_id: number;
