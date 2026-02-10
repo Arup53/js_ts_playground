@@ -34,12 +34,12 @@ export interface Entries {
 
 export interface EventProperties {}
 
-export interface Event {
+export interface EventInterface {
   tenant_id: number;
   anonymous_id: number;
   user_id?: number;
   event: string;
-  properties: EventProperties;
+  properties?: EventProperties;
 }
 
 export interface Campaign {
