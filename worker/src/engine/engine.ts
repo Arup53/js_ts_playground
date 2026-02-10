@@ -1,8 +1,3 @@
-// enum Status {
-//   Active = "ACTIVE",
-//   Completed = "COMPLETED",
-// }
-
 import Publisher from "./publisher";
 import {
   CamapaignTypes,
@@ -175,9 +170,10 @@ function fethActiveCampaigns(tenant_id) {}
 function matchCampaigns(event, activeCampaigns) {
   for (const campaign of activeCampaigns) {
     if (event.event === campaign.trigger.event_name) {
+      //also check for tenant_id
       console.log(event.event);
       console.log(campaign.trigger.event_name);
-      ////////also check for tenant_id
+
       matched_campagins.push(campaign);
     }
   }
