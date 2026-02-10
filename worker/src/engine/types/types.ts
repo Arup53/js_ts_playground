@@ -5,10 +5,11 @@ export enum CamapaignTypes {
 }
 
 export enum Channel {
-  "sms",
-  "email",
-  "slack",
+  sms = "sms",
+  email = "email",
+  slack = "slack",
 }
+
 export interface Action {
   channel: Channel;
   message: string;
