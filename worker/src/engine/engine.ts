@@ -165,7 +165,9 @@ const campaigns: Campaign[] = [
 
 let matched_campagins: Campaign[] = [];
 
-function fethActiveCampaigns(tenant_id) {}
+function fethActiveCampaigns(tenant_id) {
+  // use hash and set in redis
+}
 
 function matchCampaigns(event, activeCampaigns) {
   for (const campaign of activeCampaigns) {
