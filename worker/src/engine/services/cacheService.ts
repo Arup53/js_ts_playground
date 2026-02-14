@@ -59,15 +59,12 @@ class CacheService {
     });
   }
 
-  async addToTenantIndex(campaign) {
+  async addToTenantIndex(tenant_id, status, campaign_id) {
     if (!this.isConnected) {
       await this.connect();
     }
-    const key = this._tenantCampaignsByStatusIndexKey(
-      campaign.tenant_id,
-      campaign.status
-    );
+    const key = this._tenantCampaignsByStatusIndexKey(tenant_id, status);
 
-    await this.client?.sAdd(key, campaign.campaign_id.toString());
+    await this.client?.sAdd(key, campaign_id.toString());
   }
 }
