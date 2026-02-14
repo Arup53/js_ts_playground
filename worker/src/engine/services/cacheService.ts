@@ -8,6 +8,10 @@ class CacheService {
     this.isConnected = false;
   }
 
+  _campaignKey(campaign) {
+    return `campaign:${campaign.id}`;
+  }
+
   async connect() {
     if (this.isConnected) return;
 
@@ -34,7 +38,7 @@ class CacheService {
       return "Error, Invalid Arguments";
     }
 
-    const key = `campaign:${campaign.id}`;
+    const key = this._campaignKey(campaign);
 
     const setCampaign = await this.client?.hSet(key, {
       id: campaign.id.toString(),
