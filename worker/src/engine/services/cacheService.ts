@@ -12,6 +12,10 @@ class CacheService {
     return `campaign:${campaign.id}`;
   }
 
+  _tenantCampaignsByStatusIndexKey(tenant_id, status) {
+    return `tenant:${tenant_id}:camapaign:${status}`;
+  }
+
   async connect() {
     if (this.isConnected) return;
 
