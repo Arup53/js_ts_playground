@@ -33,7 +33,7 @@ class CacheService {
     console.log("Publisher conencted to Redis");
   }
 
-  async addCampaign(campaign) {
+  async addCampaignToCache(campaign) {
     if (!this.isConnected) {
       await this.connect();
     }
