@@ -58,4 +58,16 @@ class CacheService {
       created_at: campaign.created_at.toISOString(),
     });
   }
+
+  async addToTenantIndex(campaign) {
+    if (!this.isConnected) {
+      await this.connect();
+    }
+    const key = this._tenantCampaignsByStatusIndexKey(
+      campaign.tenant_id,
+      campaign.status
+    );
+
+    await this.client?.sAdd(key, campaign.campaign_id.toString());
+  }
 }
