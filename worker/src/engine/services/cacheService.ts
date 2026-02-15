@@ -1,4 +1,5 @@
 import { createClient, type RedisClientType } from "redis";
+import type { Campaign } from "../types/types";
 
 class CacheService {
   private client: RedisClientType | null;
@@ -8,8 +9,8 @@ class CacheService {
     this.isConnected = false;
   }
 
-  _campaignKey(campaign) {
-    return `campaign:${campaign.id}`;
+  _campaignKey(camapaignId) {
+    return `campaign:${camapaignId}`;
   }
 
   _tenantCampaignsByStatusIndexKey(tenant_id, status) {
@@ -42,7 +43,7 @@ class CacheService {
       return "Error, Invalid Arguments";
     }
 
-    const key = this._campaignKey(campaign);
+    const key = this._campaignKey(campaign.id);
 
     const setCampaign = await this.client?.hSet(key, {
       id: campaign.id.toString(),
@@ -67,4 +68,29 @@ class CacheService {
 
     await this.client?.sAdd(key, campaign_id.toString());
   }
+
+  // ------------------- Get all campaign by active status ---------
+  
+  async getAllCampaignByStatus(tenant_id, status){
+    if (!tenant_id || !status) return "Error, tenant_id or status can not be null"
+    let results=[];
+    const indexKey= this._tenantCampaignsByStatusIndexKey(tenant_id,status);
+    const campaignIds= await this.client?.sMembers(indexKey)!;
+    if (campaignIds.length===0) return "Error, no campaigns ids"
+    try{
+      for(const campaignId of campaignIds ){
+      const campaignKey=this._campaignKey(campaignId) 
+      const res= await this.client?.hGetAll(campaignId)!
+      console.log("HGETALL",res);
+      if(Object.keys(res).length){
+        results.push(res);
+      }
+    }
+    }catch (err){
+      console.log("Error while fetching campaigns")
+    }
+    return results;
+  }
+  
+  
 }
