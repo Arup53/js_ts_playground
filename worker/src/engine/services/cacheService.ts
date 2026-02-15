@@ -17,6 +17,12 @@ class CacheService {
     return `tenant:${tenant_id}:camapaign:${status}`;
   }
 
+  connectStatus() {
+    if (!this.isConnected) {
+      return false;
+    }
+  }
+
   async connect() {
     if (this.isConnected) return;
 
@@ -45,7 +51,7 @@ class CacheService {
 
     const key = this._campaignKey(campaign.id);
 
-    const setCampaign = await this.client?.hSet(key, {
+    const res = await this.client?.hSet(key, {
       id: campaign.id.toString(),
       tenant_id: campaign.tenant_id,
       campaign_name: campaign.campaign_name,
@@ -58,6 +64,7 @@ class CacheService {
       active: campaign.active,
       created_at: campaign.created_at.toISOString(),
     });
+    return res;
   }
 
   async addToTenantIndex(tenant_id, status, campaign_id) {
@@ -70,51 +77,67 @@ class CacheService {
   }
 
   // ------------------- Get all campaign by active status ---------
-  
-  async getAllCampaignByStatus(tenant_id, status){
-    if (!tenant_id || !status) return "Error, tenant_id or status can not be null"
-    let results=[];
-    const indexKey= this._tenantCampaignsByStatusIndexKey(tenant_id,status);
-    const campaignIds= await this.client?.sMembers(indexKey)!;
-    if (campaignIds.length===0) return "Error, no campaigns ids"
-    try{
-      for(const campaignId of campaignIds ){
-      const campaignKey=this._campaignKey(campaignId) 
-      const res= await this.client?.hGetAll(campaignId)!
-      console.log("HGETALL",res);
-      if(Object.keys(res).length){
-        results.push(res);
+
+  async getAllCampaignByStatus(tenant_id, status) {
+    if (!tenant_id || !status)
+      return "Error, tenant_id or status can not be null";
+    let results = [];
+    const indexKey = this._tenantCampaignsByStatusIndexKey(tenant_id, status);
+    const campaignIds = await this.client?.sMembers(indexKey)!;
+    if (campaignIds.length === 0) return "Error, no campaigns ids";
+    try {
+      for (const campaignId of campaignIds) {
+        const campaignKey = this._campaignKey(campaignId);
+        const res = await this.client?.hGetAll(campaignId)!;
+        console.log("HGETALL", res);
+        if (Object.keys(res).length) {
+          results.push(res);
+        }
       }
-    }
-    }catch (err){
-      console.log("Error while fetching campaigns")
+    } catch (err) {
+      console.log("Error while fetching campaigns");
     }
     return results;
   }
-  
+
   // --------------- update/ cache invalidation -----------
 
-  async changeCampaignStatus (tenant_id, curr_status,new_status,campaign_id ){
+  async changeCampaignStatus(tenant_id, curr_status, new_status, campaign_id) {
+    const indexKeyCurrent = this._tenantCampaignsByStatusIndexKey(
+      tenant_id,
+      curr_status
+    );
+    const indexKeyNew = this._tenantCampaignsByStatusIndexKey(
+      tenant_id,
+      curr_status
+    );
 
-    const indexKeyCurrent= this._tenantCampaignsByStatusIndexKey(tenant_id,curr_status);
-    const indexKeyNew= this._tenantCampaignsByStatusIndexKey(tenant_id,curr_status);
-
-     // ---- change campaign status field in set----
-    const campaignIds= await this.client?.sMembers(indexKeyCurrent)!;
-    const camapignIdToDelete= campaignIds.find((key)=>{if(key===campaign_id){
-      return key
-    }});
-    if(camapignIdToDelete){
-      const deleteRes= await this.client?.sRem(indexKeyCurrent,camapignIdToDelete)
-      const newStatus= await this.client?.sAdd(indexKeyNew,camapignIdToDelete)
-    }else {
-      return "Error in deletion of key from tenantIndex"
+    // ---- change campaign status field in set----
+    const campaignIds = await this.client?.sMembers(indexKeyCurrent)!;
+    const camapignIdToDelete = campaignIds.find((key) => {
+      if (key === campaign_id) {
+        return key;
+      }
+    });
+    if (camapignIdToDelete) {
+      const deleteRes = await this.client?.sRem(
+        indexKeyCurrent,
+        camapignIdToDelete
+      );
+      const newStatus = await this.client?.sAdd(
+        indexKeyNew,
+        camapignIdToDelete
+      );
+    } else {
+      return "Error in deletion of key from tenantIndex";
     }
     // ---- change campaign status field in hashmap----
-    const camapaignKey= this._campaignKey(campaign_id);
-    const result= await this.client?.hSet(camapaignKey,{
-      active: new_status
+    const camapaignKey = this._campaignKey(campaign_id);
+    const result = await this.client?.hSet(camapaignKey, {
+      active: new_status,
     });
-    return "Success"
+    return "Success";
   }
 }
+
+export const cacheService = new CacheService();
