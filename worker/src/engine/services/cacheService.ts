@@ -92,5 +92,29 @@ class CacheService {
     return results;
   }
   
-  
+  // --------------- update/ cache invalidation -----------
+
+  async changeCampaignStatus (tenant_id, curr_status,new_status,campaign_id ){
+
+    const indexKeyCurrent= this._tenantCampaignsByStatusIndexKey(tenant_id,curr_status);
+    const indexKeyNew= this._tenantCampaignsByStatusIndexKey(tenant_id,curr_status);
+
+     // ---- change campaign status field in set----
+    const campaignIds= await this.client?.sMembers(indexKeyCurrent)!;
+    const camapignIdToDelete= campaignIds.find((key)=>{if(key===campaign_id){
+      return key
+    }});
+    if(camapignIdToDelete){
+      const deleteRes= await this.client?.sRem(indexKeyCurrent,camapignIdToDelete)
+      const newStatus= await this.client?.sAdd(indexKeyNew,camapignIdToDelete)
+    }else {
+      return "Error in deletion of key from tenantIndex"
+    }
+    // ---- change campaign status field in hashmap----
+    const camapaignKey= this._campaignKey(campaign_id);
+    const result= await this.client?.hSet(camapaignKey,{
+      active: new_status
+    });
+    return "Success"
+  }
 }
