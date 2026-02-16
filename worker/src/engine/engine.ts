@@ -10,9 +10,7 @@ import {
   type EventInterface,
 } from "./types/types";
 
-const tenant_id = "acme"; // this will be this.tenant_id after class implemention
-
-const publisher = new Publisher();
+// this will be this.tenant_id after class implemention
 
 const event1: EventInterface = {
   tenant_id: 58922,
