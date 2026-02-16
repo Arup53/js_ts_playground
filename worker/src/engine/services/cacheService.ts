@@ -100,7 +100,7 @@ class CacheService {
         const res = await this.client?.hGetAll(campaignKey)!;
 
         if (Object.keys(res).length) {
-          results.push(res);
+          results.push({ ...res });
         }
       }
     } catch (err) {
