@@ -88,7 +88,7 @@ class CacheService {
 
   // ------------------- Get all campaign by active status ---------
 
-  async getAllCampaignByStatus(tenant_id, status) {
+  async getAllCampaignByStatus(tenant_id, status: boolean) {
     if (!tenant_id || !status)
       return "Error, tenant_id or status can not be null";
     let results = [];
