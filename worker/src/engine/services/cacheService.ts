@@ -83,13 +83,17 @@ class CacheService {
       return "Error, tenant_id or status can not be null";
     let results = [];
     const indexKey = this._tenantCampaignsByStatusIndexKey(tenant_id, status);
+    console.log("indexKey", indexKey);
     const campaignIds = await this.client?.sMembers(indexKey)!;
+    console.log(campaignIds);
     if (campaignIds.length === 0) return "Error, no campaigns ids";
     try {
       for (const campaignId of campaignIds) {
         const campaignKey = this._campaignKey(campaignId);
-        const res = await this.client?.hGetAll(campaignId)!;
-        console.log("HGETALL", res);
+        console.log("campaign key in cacheservice", campaignKey);
+        console.log(typeof campaignKey);
+        const res = await this.client?.hGetAll(campaignKey)!;
+        console.log("HGETALL in cacheservice", res);
         if (Object.keys(res).length) {
           results.push(res);
         }
