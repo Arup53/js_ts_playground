@@ -34,6 +34,10 @@ class CampaignService {
 
     return campaigns;
   }
+
+  async quit() {
+    await cacheService.closeConnection();
+  }
 }
 
 export default CampaignService;
