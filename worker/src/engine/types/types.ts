@@ -1,7 +1,7 @@
 export enum CamapaignTypes {
-  "event",
-  "attribute",
-  "segment",
+  event = "event",
+  attribute = "attribute",
+  segment = "segment",
 }
 
 export enum Channel {
@@ -16,17 +16,17 @@ export interface Action {
 }
 
 export enum Operator {
-  "equals",
-  "notEquals",
-  "greaterThan",
-  "lessThan",
-  "contains",
-  "exists",
+  equals = "equals",
+  notEquals = "notEquals",
+  greaterThan = "greaterThan",
+  lessThan = "lessThan",
+  contains = "contains",
+  exists = "exists",
 }
 
 export enum Frequency {
-  "every_time",
-  "one_time",
+  every_time = "every_time",
+  one_time = "one_time",
 }
 
 export interface Entries {
