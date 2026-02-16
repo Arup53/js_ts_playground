@@ -1,5 +1,10 @@
 import { createClient, type RedisClientType } from "redis";
-import type { Campaign } from "../types/types";
+import {
+  CamapaignTypes,
+  Channel,
+  type Action,
+  type Campaign,
+} from "../types/types";
 
 class CacheService {
   private client: RedisClientType | null;
@@ -50,14 +55,14 @@ class CacheService {
       await this.connect();
     }
 
-    if (campaign) {
+    if (!campaign) {
       return "Error, Invalid Arguments";
     }
 
-    const key = this._campaignKey(campaign.id);
+    const key = this._campaignKey(campaign.campaign_id);
 
     const res = await this.client?.hSet(key, {
-      id: campaign.id.toString(),
+      id: campaign.campaign_id.toString(),
       tenant_id: campaign.tenant_id.toString(),
       campaign_name: campaign.campaign_name,
       campaign_type: campaign.campaign_type,
@@ -67,7 +72,7 @@ class CacheService {
       duration: campaign.duration?.toString(),
       frequency: campaign.frequency?.toString(),
       active: campaign.active?.toString(),
-      created_at: campaign.created_at.toISOString(),
+      created_at: campaign.created_at,
     });
     return res;
   }
@@ -97,16 +102,42 @@ class CacheService {
         const campaignKey = this._campaignKey(campaignId);
         console.log("campaign key in cacheservice", campaignKey);
         console.log(typeof campaignKey);
-        const res = await this.client?.hGetAll(campaignKey)!;
+        const unstructred_res = await this.client?.hGetAll(campaignKey)!;
+
+        const res = { ...unstructred_res };
 
         if (Object.keys(res).length) {
-          results.push({ ...res });
+          const parsedActions = JSON.parse(res.actions!) as {
+            action: Action[];
+          };
+
+          const campaign: Campaign = {
+            tenant_id: Number(res.tenant_id),
+            campaign_id: Number(res.id),
+            campaign_name: res.campaign_name!,
+            campaign_type: res.campaign_type as CamapaignTypes,
+            trigger: JSON.parse(res.trigger!),
+            actions: {
+              action: parsedActions.action.map((a) => ({
+                channel: a.channel as Channel,
+                message: a.message,
+              })),
+            },
+            duration: res.duration!,
+            frequency: Number(res.frequency),
+            entries_customers: JSON.parse(res.entries_customers!),
+            active: res.active === "true",
+            created_at: res.created_at!,
+          };
+
+          results.push(campaign);
         }
       }
+
+      return results;
     } catch (err) {
-      console.log("Error while fetching campaigns");
+      console.log("Error while fetching campaigns in catching service");
     }
-    return results;
   }
 
   // --------------- update/ cache invalidation -----------
