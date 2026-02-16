@@ -23,7 +23,7 @@ class CampaignService {
     );
   }
 
-  async getCampaignsOfTenantByStatus(tenant_id, status) {
+  async getCampaignsOfTenantByStatus(tenant_id, status: boolean) {
     if (!cacheService.connectStatus()) {
       await this.init();
     }
