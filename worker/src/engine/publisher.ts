@@ -1,4 +1,4 @@
-class Publisher {
+export class Publisher {
   async publish(channel, message) {
     const parsed_message = JSON.parse(message);
     console.log("Channel is ", channel);
