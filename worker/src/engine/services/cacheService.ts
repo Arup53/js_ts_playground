@@ -53,15 +53,15 @@ class CacheService {
 
     const res = await this.client?.hSet(key, {
       id: campaign.id.toString(),
-      tenant_id: campaign.tenant_id,
+      tenant_id: campaign.tenant_id.toString(),
       campaign_name: campaign.campaign_name,
       campaign_type: campaign.campaign_type,
-      trigger: campaign.trigger,
-      actions: campaign.actions,
-      duration: campaign.duration,
-      frequency: campaign.frequency,
-      entries_customers: campaign.entries_customers,
-      active: campaign.active,
+      trigger: JSON.stringify(campaign.trigger),
+      actions: JSON.stringify(campaign.actions),
+      entries_customers: JSON.stringify(campaign.entries_customers),
+      duration: campaign.duration?.toString(),
+      frequency: campaign.frequency?.toString(),
+      active: campaign.active?.toString(),
       created_at: campaign.created_at.toISOString(),
     });
     return res;
