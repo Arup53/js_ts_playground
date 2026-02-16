@@ -35,3 +35,5 @@ class CampaignService {
     return campaigns;
   }
 }
+
+export default CampaignService;
