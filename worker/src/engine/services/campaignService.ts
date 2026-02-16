@@ -22,4 +22,16 @@ class CampaignService {
       camapaign.campaign_id
     );
   }
+
+  async getCampaignsOfTenantByStatus(tenant_id, status) {
+    if (!cacheService.connectStatus()) {
+      await this.init();
+    }
+    const campaigns = await cacheService.getAllCampaignByStatus(
+      tenant_id,
+      status
+    );
+
+    return campaigns;
+  }
 }
