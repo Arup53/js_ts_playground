@@ -40,6 +40,11 @@ class CacheService {
     console.log("Publisher conencted to Redis");
   }
 
+  async closeConnection() {
+    await this.client?.quit();
+    console.log("Closed Redis Connection");
+  }
+
   async addCampaignToCache(campaign) {
     if (!this.isConnected) {
       await this.connect();
@@ -93,7 +98,7 @@ class CacheService {
         console.log("campaign key in cacheservice", campaignKey);
         console.log(typeof campaignKey);
         const res = await this.client?.hGetAll(campaignKey)!;
-        console.log("HGETALL in cacheservice", res);
+
         if (Object.keys(res).length) {
           results.push(res);
         }
