@@ -2,7 +2,7 @@ import { createClient } from "redis";
 
 async function main() {
   const redisClient = createClient({
-    url: "redis://127.0.0.1:6379"
+    url: "redis://127.0.0.1:6379",
   });
 
   redisClient.on("error", (err) => {
@@ -20,10 +20,9 @@ async function main() {
 
       const event = JSON.parse(result.element);
 
-      console.log("Processing event:", event);
+      console.log("Processing event:", event.user_id);
 
       // await handleEvent(event);`
-
     } catch (err) {
       console.error("Worker error:", err);
     }
