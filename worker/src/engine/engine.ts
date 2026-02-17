@@ -196,5 +196,3 @@ async function test() {
 
   await engine.process(event1);
 }
-
-test();
