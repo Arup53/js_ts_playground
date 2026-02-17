@@ -15,7 +15,7 @@ import {
 const event1: EventInterface = {
   tenant_id: 58922,
   anonymous_id: 5611,
-  user_id: 909999009900,
+  user_id: 420,
   event: "sign_up",
 };
 
