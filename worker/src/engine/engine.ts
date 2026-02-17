@@ -159,9 +159,10 @@ export default class Engine {
     }
   }
 
-  async processor(event) {
+  async process(event) {
     if (!this.publisher || !this.campaignService) {
-      return "Error, object not instanited in engine";
+      console.log("Error, object not instanited in engine");
+      return;
     }
 
     try {
@@ -193,7 +194,7 @@ async function test() {
 
   // await engine.process(event1);
 
-  await engine.processor(event1);
+  await engine.process(event1);
 }
 
 test();
