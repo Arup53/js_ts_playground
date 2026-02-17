@@ -10,8 +10,6 @@ import {
   type EventInterface,
 } from "./types/types";
 
-// this will be this.tenant_id after class implemention
-
 const event1: EventInterface = {
   tenant_id: 58922,
   anonymous_id: 5611,
@@ -57,38 +55,6 @@ const campaigns: Campaign[] = [
     created_at: "30january",
   },
 ];
-
-// let matched_campagins: Campaign[] = [];
-
-// function processMatchedCampaigns(event, matched_campagins) {
-//   matched_campagins.forEach((campaign: Campaign) => {
-//     campaign.actions.action.forEach((action: Action) => {
-//       campaign.trigger.conditions.forEach((condition) => {
-//         if (
-//           condition.base_condition &&
-//           campaign.frequency === 1 &&
-//           !Object.hasOwn(campaign.entries_customers, event.user_id)
-//         ) {
-//           console.log(action);
-//           publisher.publish(
-//             action.channel,
-//             JSON.stringify({
-//               message: action.message,
-//               user_id: event.user_id,
-//               tenant_id: tenant_id,
-//             })
-//           );
-//           campaign.entries_customers[event.user_id] = "subscribed";
-//         } else if (condition.segment_filter) {
-//         } else if (condition.attrubute_filter) {
-//         }
-//       });
-//     });
-//   });
-// }
-
-// matchCampaigns(event1, campaigns);
-// processMatchedCampaigns(event1, matched_campagins);
 
 export default class Engine {
   private publisher: Publisher | null;
