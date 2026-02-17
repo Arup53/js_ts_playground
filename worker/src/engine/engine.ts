@@ -90,7 +90,7 @@ const campaigns: Campaign[] = [
 // matchCampaigns(event1, campaigns);
 // processMatchedCampaigns(event1, matched_campagins);
 
-export class Engine {
+export default class Engine {
   private publisher: Publisher | null;
   private campaignService: CampaignService | null;
 
@@ -159,18 +159,25 @@ export class Engine {
     }
   }
 
-  async process(event) {
-    if (this.publisher || this.campaignService) {
+  async processor(event) {
+    if (!this.publisher || !this.campaignService) {
       return "Error, object not instanited in engine";
     }
 
-    const active_campaigns = await this.fethActiveCampaigns(event.tenant_id);
-    const matched_campagins = await this.matchedCampaigns(
-      event,
-      active_campaigns
-    );
-    const result = await this.processMatchedCampaigns(event, matched_campagins);
-    console.log("worker has completed processing event", event.event);
+    try {
+      const active_campaigns = await this.fethActiveCampaigns(event.tenant_id);
+      const matched_campagins = await this.matchedCampaigns(
+        event,
+        active_campaigns
+      );
+      const result = await this.processMatchedCampaigns(
+        event,
+        matched_campagins
+      );
+      console.log("worker has completed processing event", event.event);
+    } catch (e) {
+      console.log("Error in processor");
+    }
   }
 }
 
@@ -179,10 +186,14 @@ async function test() {
   const campaignServiceObj = new CampaignService();
   const engine = new Engine(publisherObj, campaignServiceObj);
 
-  const active = await engine.fethActiveCampaigns(58922);
-  const matched = await engine.matchedCampaigns(event1, active);
-  const processWorkflow = await engine.processMatchedCampaigns(event1, matched);
-  console.log(processWorkflow);
+  // const active = await engine.fethActiveCampaigns(58922);
+  // const matched = await engine.matchedCampaigns(event1, active);
+  // const processWorkflow = await engine.processMatchedCampaigns(event1, matched);
+  // console.log(processWorkflow);
+
+  // await engine.process(event1);
+
+  await engine.processor(event1);
 }
 
 test();
