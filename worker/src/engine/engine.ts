@@ -137,12 +137,12 @@ export class Engine {
               !Object.hasOwn(campaign.entries_customers, event.user_id)
             ) {
               console.log(action);
-              publisher.publish(
+              this.publisher?.publish(
                 action.channel,
                 JSON.stringify({
                   message: action.message,
                   user_id: event.user_id,
-                  tenant_id: tenant_id,
+                  tenant_id: event.tenant_id,
                 })
               );
               campaign.entries_customers[event.user_id] = "subscribed";
