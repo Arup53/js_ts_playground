@@ -39,7 +39,7 @@ export class Publisher {
           const response_sms_send = await this.client.send(command_sms);
           console.log("SNS Message ID:", response_sms_send.MessageId);
         } catch (e) {
-          console.log("Failed send sms");
+          throw new Error("Failed send sms");
         }
         break;
       case "email":
