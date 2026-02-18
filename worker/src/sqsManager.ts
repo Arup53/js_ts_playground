@@ -14,11 +14,17 @@ type SQSMessage = {
 };
 
 class SQSManager {
-  private sqs_url;
-  private client;
+  private sqs_url: string | null;
+  private client: SQSClient;
   constructor() {
+    if (!process.env.SQS_URL) {
+      throw new Error("SQS_URL is not defined in environment variables");
+    }
     this.client = new SQSClient({});
-    this.sqs_url = process.env.SQS_URL;
+    this.sqs_url = process.env.SQS_URL || null;
+    if (this.client) {
+      throw new Error("SQS client intilization failed");
+    }
   }
 
   async enqueue(message: SQSMessage) {
