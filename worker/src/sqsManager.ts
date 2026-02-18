@@ -1,4 +1,9 @@
-import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+import {
+  DeleteMessageCommand,
+  ReceiveMessageCommand,
+  SendMessageCommand,
+  SQSClient,
+} from "@aws-sdk/client-sqs";
 
 type SQSMessage = {
   tenant_id: number;
@@ -33,5 +38,42 @@ class SQSManager {
       console.error("Failed to send SQS message:", error);
       throw error;
     }
+  }
+
+  async dequeue(): Promise<SQSMessage | null> {
+    if (!this.sqs_url) {
+      throw new Error("SQS_URL is not defined");
+    }
+
+    const receiveCommand = new ReceiveMessageCommand({
+      QueueUrl: this.sqs_url,
+      MaxNumberOfMessages: 1,
+      WaitTimeSeconds: 10, // long polling
+    });
+
+    const response = await this.client.send(receiveCommand);
+
+    if (!response.Messages || response.Messages.length === 0) {
+      return null;
+    }
+
+    const message = response.Messages[0];
+
+    if (!message?.Body || !message?.ReceiptHandle) {
+      return null;
+    }
+
+    // Parse body
+    const body = JSON.parse(message.Body) as SQSMessage;
+
+    // Delete message after successful read
+    const deleteCommand = new DeleteMessageCommand({
+      QueueUrl: this.sqs_url,
+      ReceiptHandle: message.ReceiptHandle,
+    });
+
+    await this.client.send(deleteCommand);
+
+    return body;
   }
 }
