@@ -18,6 +18,14 @@ export class Publisher {
     console.log("Channel is ", channel);
     console.log("message is ", parsed_message);
   }
+
+  publishCommandWrapper(arn, message) {
+    const publishCommand = new PublishCommand({
+      TopicArn: arn,
+      Message: JSON.stringify(message),
+    });
+    return publishCommand;
+  }
 }
 
 export default Publisher;
