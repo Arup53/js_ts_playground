@@ -14,14 +14,14 @@ type SQSMessage = {
 };
 
 class SQSManager {
-  private sqs_url: string | null;
+  private sqs_url: string;
   private client: SQSClient;
   constructor() {
     if (!process.env.SQS_URL) {
       throw new Error("SQS_URL is not defined in environment variables");
     }
     this.client = new SQSClient({});
-    this.sqs_url = process.env.SQS_URL || null;
+    this.sqs_url = process.env.SQS_URL;
     if (!this.client) {
       throw new Error("SQS client intilization failed");
     }
@@ -29,7 +29,7 @@ class SQSManager {
 
   async enqueue(message: SQSMessage) {
     const command = new SendMessageCommand({
-      QueueUrl: this.sqs_url!,
+      QueueUrl: this.sqs_url,
       MessageBody: JSON.stringify(message),
     });
 
@@ -44,7 +44,7 @@ class SQSManager {
 
   async dequeue(): Promise<SQSMessage | null> {
     const receiveCommand = new ReceiveMessageCommand({
-      QueueUrl: this.sqs_url!,
+      QueueUrl: this.sqs_url,
       MaxNumberOfMessages: 1,
       WaitTimeSeconds: 10, // long polling
     });
@@ -60,7 +60,7 @@ class SQSManager {
     }
     const body = JSON.parse(message.Body) as SQSMessage;
     const deleteCommand = new DeleteMessageCommand({
-      QueueUrl: this.sqs_url!,
+      QueueUrl: this.sqs_url,
       ReceiptHandle: message.ReceiptHandle,
     });
     await this.client.send(deleteCommand);
