@@ -41,11 +41,14 @@ async function main() {
       // );
 
       const event = await sqsManager.dequeue();
-      if (!event) continue;
+      if (!event) {
+        await new Promise((res) => setTimeout(res, 1000)); // 1s delay
+        continue;
+      }
       console.log("Processing event:", event);
       await engine.process(event);
     } catch (err) {
-      console.error("Worker error:", err);
+      console.error("Worker error while processing event:", err);
     }
   }
 }
