@@ -13,7 +13,7 @@ type SQSMessage = {
   properties: Record<string, any>;
 };
 
-class SQSManager {
+export default class SQSManager {
   private sqs_url: string;
   private client: SQSClient;
   constructor() {
