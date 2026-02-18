@@ -21,7 +21,7 @@ class SQSManager {
     this.sqs_url = process.env.SQS_URL;
   }
 
-  async sendMessageToSQS(message: SQSMessage) {
+  async enqueue(message: SQSMessage) {
     if (!this.sqs_url) {
       throw new Error("SQS_URL is not defined in environment variables");
     }
