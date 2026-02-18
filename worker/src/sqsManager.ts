@@ -22,18 +22,14 @@ class SQSManager {
     }
     this.client = new SQSClient({});
     this.sqs_url = process.env.SQS_URL || null;
-    if (this.client) {
+    if (!this.client) {
       throw new Error("SQS client intilization failed");
     }
   }
 
   async enqueue(message: SQSMessage) {
-    if (!this.sqs_url) {
-      throw new Error("SQS_URL is not defined in environment variables");
-    }
-
     const command = new SendMessageCommand({
-      QueueUrl: this.sqs_url,
+      QueueUrl: this.sqs_url!,
       MessageBody: JSON.stringify(message),
     });
 
@@ -47,12 +43,8 @@ class SQSManager {
   }
 
   async dequeue(): Promise<SQSMessage | null> {
-    if (!this.sqs_url) {
-      throw new Error("SQS_URL is not defined");
-    }
-
     const receiveCommand = new ReceiveMessageCommand({
-      QueueUrl: this.sqs_url,
+      QueueUrl: this.sqs_url!,
       MaxNumberOfMessages: 1,
       WaitTimeSeconds: 10, // long polling
     });
@@ -62,24 +54,16 @@ class SQSManager {
     if (!response.Messages || response.Messages.length === 0) {
       return null;
     }
-
     const message = response.Messages[0];
-
     if (!message?.Body || !message?.ReceiptHandle) {
       return null;
     }
-
-    // Parse body
     const body = JSON.parse(message.Body) as SQSMessage;
-
-    // Delete message after successful read
     const deleteCommand = new DeleteMessageCommand({
-      QueueUrl: this.sqs_url,
+      QueueUrl: this.sqs_url!,
       ReceiptHandle: message.ReceiptHandle,
     });
-
     await this.client.send(deleteCommand);
-
     return body;
   }
 }
