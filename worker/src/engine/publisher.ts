@@ -19,6 +19,35 @@ export class Publisher {
     console.log("message is ", parsed_message);
   }
 
+  async sendToSns(topic, body) {
+    switch (topic) {
+      case "sms":
+        const command_sms = this.publishCommandWrapper(
+          this.arn_topic_container.sms,
+          body
+        );
+        const response_sms_send = await this.client.send(command_sms);
+        console.log("SNS Message ID:", response_sms_send.MessageId);
+        break;
+      case "email":
+        const command_email = this.publishCommandWrapper(
+          this.arn_topic_container.email,
+          body
+        );
+        const response_email_send = await this.client.send(command_email);
+        console.log("SNS Message ID:", response_email_send.MessageId);
+        break;
+      case "slack":
+        const command_slack = this.publishCommandWrapper(
+          this.arn_topic_container.slack,
+          body
+        );
+        const response_slack_send = await this.client.send(command_slack);
+        console.log("SNS Message ID:", response_slack_send.MessageId);
+        break;
+    }
+  }
+
   publishCommandWrapper(arn, message) {
     const publishCommand = new PublishCommand({
       TopicArn: arn,
