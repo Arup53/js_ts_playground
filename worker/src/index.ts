@@ -23,6 +23,16 @@ async function main() {
   const campaignService = new CampaignService();
   const engine = new Engine(publisher, campaignService);
 
+  process.on("SIGINT", () => {
+    console.log("Shutting down worker...");
+    process.exit(0);
+  });
+
+  process.on("SIGTERM", () => {
+    console.log("Shutting down worker...");
+    process.exit(0);
+  });
+
   while (true) {
     try {
       // const result = await redisClient.brPop("event_queue", 0);
