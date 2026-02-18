@@ -53,9 +53,13 @@ export class Publisher {
           this.arn_topic_container.slack,
           body
         );
-        const response_slack_send = await this.client.send(command_slack);
-        console.log("SNS Message ID:", response_slack_send.MessageId);
 
+        try {
+          const response_slack_send = await this.client.send(command_slack);
+          console.log("SNS Message ID:", response_slack_send.MessageId);
+        } catch (e) {
+          throw new Error("Failed send slack message");
+        }
         break;
       default:
         throw new Error(`Unsupported topic: ${topic}`);
