@@ -29,8 +29,12 @@ export class Publisher {
           this.arn_topic_container.sms,
           body
         );
-        const response_sms_send = await this.client.send(command_sms);
-        console.log("SNS Message ID:", response_sms_send.MessageId);
+        try {
+          const response_sms_send = await this.client.send(command_sms);
+          console.log("SNS Message ID:", response_sms_send.MessageId);
+        } catch (e) {
+          console.log("Failed send sms");
+        }
         break;
       case "email":
         const command_email = this.publishCommandWrapper(
@@ -51,6 +55,7 @@ export class Publisher {
         );
         const response_slack_send = await this.client.send(command_slack);
         console.log("SNS Message ID:", response_slack_send.MessageId);
+
         break;
       default:
         throw new Error(`Unsupported topic: ${topic}`);
