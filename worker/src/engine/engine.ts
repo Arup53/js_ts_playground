@@ -149,21 +149,6 @@ export default class Engine {
 }
 
 async function test() {
-  const publisherObj = new Publisher();
-  const campaignServiceObj = new CampaignService();
-  const engine = new Engine(publisherObj, campaignServiceObj);
-
-  // const active = await engine.fethActiveCampaigns(58922);
-  // const matched = await engine.matchedCampaigns(event1, active);
-  // const processWorkflow = await engine.processMatchedCampaigns(event1, matched);
-  // console.log(processWorkflow);
-
-  // await engine.process(event1);
-
-  await engine.process(event1);
-}
-
-async function test() {
   const publisher = new Publisher();
   const campaignService = new CampaignService();
   const engine = new Engine(publisher, campaignService);
