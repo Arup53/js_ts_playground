@@ -14,6 +14,10 @@ export class Publisher {
   }
 
   async publish(channel, message) {
+    if (channel || message) {
+      console.log("Invalid argument in publish method");
+      return;
+    }
     const parsed_message = JSON.parse(message);
     console.log("Channel is ", channel);
     console.log("message is ", parsed_message);
