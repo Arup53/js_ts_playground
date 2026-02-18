@@ -17,9 +17,12 @@ export class Publisher {
     const parsed_message = JSON.parse(message);
     console.log("Channel is ", channel);
     console.log("message is ", parsed_message);
+    const response = await this.sendToSns(channel, message);
   }
 
   async sendToSns(topic, body) {
+    if (!topic || !body) throw new Error("SNS Topic or body is invalid");
+
     switch (topic) {
       case "sms":
         const command_sms = this.publishCommandWrapper(
@@ -34,8 +37,12 @@ export class Publisher {
           this.arn_topic_container.email,
           body
         );
-        const response_email_send = await this.client.send(command_email);
-        console.log("SNS Message ID:", response_email_send.MessageId);
+        try {
+          const response_email_send = await this.client.send(command_email);
+          console.log("SNS Message ID:", response_email_send.MessageId);
+        } catch (e) {
+          throw new Error("Failed send email");
+        }
         break;
       case "slack":
         const command_slack = this.publishCommandWrapper(
