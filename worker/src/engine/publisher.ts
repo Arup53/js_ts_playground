@@ -49,6 +49,10 @@ export class Publisher {
   }
 
   publishCommandWrapper(arn, message) {
+    if (!arn) {
+      throw new Error("SNS Topic ARN is undefined");
+    }
+
     const publishCommand = new PublishCommand({
       TopicArn: arn,
       Message: JSON.stringify(message),
