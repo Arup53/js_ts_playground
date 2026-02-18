@@ -14,7 +14,7 @@ export class Publisher {
   }
 
   async publish(channel, message) {
-    if (channel || message) {
+    if (!channel || !message) {
       console.log("Invalid argument in publish method");
       return;
     }
