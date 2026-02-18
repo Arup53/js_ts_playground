@@ -24,16 +24,6 @@ class SQSManager {
     const command = new SendMessageCommand({
       QueueUrl: this.sqs_url,
       MessageBody: JSON.stringify(message),
-      MessageAttributes: {
-        tenant_id: {
-          DataType: "Number",
-          StringValue: message.tenant_id.toString(),
-        },
-        event: {
-          DataType: "String",
-          StringValue: message.event,
-        },
-      },
     });
 
     try {
