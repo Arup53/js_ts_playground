@@ -17,7 +17,13 @@ export class Publisher {
     const parsed_message = JSON.parse(message);
     console.log("Channel is ", channel);
     console.log("message is ", parsed_message);
-    const response = await this.sendToSns(channel, message);
+
+    try {
+      const response = await this.sendToSns(channel, message);
+      console.log(response);
+    } catch (e) {
+      throw new Error(`publish method failed to send`);
+    }
   }
 
   async sendToSns(topic, body) {
