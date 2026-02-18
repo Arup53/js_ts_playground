@@ -162,3 +162,12 @@ async function test() {
 
   await engine.process(event1);
 }
+
+async function test() {
+  const publisher = new Publisher();
+  const campaignService = new CampaignService();
+  const engine = new Engine(publisher, campaignService);
+  const res = await engine.process(event1);
+  console.log(res);
+}
+test();
