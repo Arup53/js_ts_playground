@@ -4,14 +4,7 @@ import {
   SendMessageCommand,
   SQSClient,
 } from "@aws-sdk/client-sqs";
-
-type SQSMessage = {
-  tenant_id: number;
-  anonymous_id: number;
-  user_id: number;
-  event: string;
-  properties: Record<string, any>;
-};
+import type { EventsSchema } from "../types/types";
 
 export default class SQSManager {
   private sqs_url: string;
@@ -27,7 +20,7 @@ export default class SQSManager {
     }
   }
 
-  async enqueue(message: SQSMessage) {
+  async enqueue(message: EventsSchema) {
     const command = new SendMessageCommand({
       QueueUrl: this.sqs_url,
       MessageBody: JSON.stringify(message),
