@@ -10,7 +10,9 @@ postAnonymousEvents.post(
   "/",
   async (req: Request<{}, {}, PostEventsBody>, res: Response) => {
     const { events: eventsBatch } = req.body;
-
+    if (!Array.isArray(eventsBatch)) {
+      return res.status(400).json({ message: "Invalid events payload" });
+    }
     // const redis = await RedisManager.getInstance();
     const sqsManager = new SQSManager();
 
