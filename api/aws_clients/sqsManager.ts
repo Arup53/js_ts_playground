@@ -35,7 +35,7 @@ export default class SQSManager {
     }
   }
 
-  async dequeue(): Promise<SQSMessage | null> {
+  async dequeue(): Promise<EventsSchema | null> {
     const receiveCommand = new ReceiveMessageCommand({
       QueueUrl: this.sqs_url,
       MaxNumberOfMessages: 1,
@@ -51,7 +51,7 @@ export default class SQSManager {
     if (!message?.Body || !message?.ReceiptHandle) {
       return null;
     }
-    const body = JSON.parse(message.Body) as SQSMessage;
+    const body = JSON.parse(message.Body) as EventsSchema;
     const deleteCommand = new DeleteMessageCommand({
       QueueUrl: this.sqs_url,
       ReceiptHandle: message.ReceiptHandle,
