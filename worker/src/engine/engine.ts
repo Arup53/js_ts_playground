@@ -155,4 +155,3 @@ async function test() {
   const res = await engine.process(event1);
   console.log(res);
 }
-test();

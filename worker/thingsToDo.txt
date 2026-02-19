@@ -1,0 +1,4 @@
+1. populate redis / or create a sqs for event ingestion
+2. create sns & a sqs queue and create another lambda that will connect to sqs
+3. then deploy this index.js to lambda for before sns & sqs after of api server ; api server sends event to sqs and index.js of worker listen to sqs
+4. test
