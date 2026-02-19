@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 
-import { RedisManager } from "../RedisManager";
+import { RedisManager } from "../../RedisManager";
 import SQSManager from "../aws_clients/sqsManager";
 import type { PostEventsBody } from "../types/types";
 

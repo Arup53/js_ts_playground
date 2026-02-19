@@ -1,0 +1,18 @@
+{
+  "version": "2.0",
+  "routeKey": "GET /api_server_customerio/health",
+  "rawPath": "/default/api_server_customerio/health",
+  "rawQueryString": "",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/default/api_server_customerio/health",
+      "protocol": "HTTP/1.1"
+    },
+    "stage": "default"
+  },
+  "isBase64Encoded": false
+}
