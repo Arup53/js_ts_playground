@@ -13,7 +13,7 @@ export default class SQSManager {
     if (!process.env.SQS_URL) {
       throw new Error("SQS_URL is not defined in environment variables");
     }
-    this.client = new SQSClient({});
+    this.client = new SQSClient({ region: process.env.AWS_REGION });
     this.sqs_url = process.env.SQS_URL;
     if (!this.client) {
       throw new Error("SQS client intilization failed");
