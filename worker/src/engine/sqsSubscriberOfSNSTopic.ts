@@ -74,18 +74,17 @@ class sqsConsumerOfSNSTopic {
         const emailMessage = this.parseSNSEnvelope(sqsMessage);
 
         if (!emailMessage) {
-          // Delete malformed messages so they don't block the queue
           await this.deleteMessage(sqsMessage.ReceiptHandle!);
           continue;
         }
 
         try {
           await this.processMessage(emailMessage);
-          // Only delete AFTER successful processing
+
           await this.deleteMessage(sqsMessage.ReceiptHandle!);
           console.log("Message processed and deleted:", sqsMessage.MessageId);
         } catch (err) {
-          // Don't delete — let it retry or go to DLQ
+          // DLQ
           console.error("Processing failed, message will retry:", err);
         }
       }
