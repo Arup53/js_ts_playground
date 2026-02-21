@@ -4,7 +4,7 @@ import {
   SQSClient,
 } from "@aws-sdk/client-sqs";
 
-class sqsConsumerOfSNSTopic {
+export class sqsConsumerOfSNSTopic {
   private reigon: string | null;
   private sqs_url_for_sns: string | null;
   private sns_url: string | null;
@@ -12,7 +12,7 @@ class sqsConsumerOfSNSTopic {
 
   constructor() {
     if (
-      !process.env.REGION ||
+      !process.env.AWS_REGION ||
       !process.env.SQS_URL_FOR_SNS ||
       !process.env.SNS_URL
     ) {
@@ -21,9 +21,9 @@ class sqsConsumerOfSNSTopic {
       );
     }
 
-    this.reigon = process.env.REGION;
-    this.sqs_url_for_sns = process.env.SQS_URL_FOR_SNS;
-    this.sns_url = process.env.SNS_URL;
+    this.reigon = process.env.REGION!;
+    this.sqs_url_for_sns = process.env.SQS_URL_FOR_SNS!;
+    this.sns_url = process.env.SNS_URL!;
     this.client = new SQSClient(this.reigon);
   }
 
