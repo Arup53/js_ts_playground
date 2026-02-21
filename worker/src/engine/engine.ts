@@ -1,4 +1,4 @@
-import Publisher from "./publisher";
+import Publisher from "./snsManager";
 import CampaignService from "./services/campaignService";
 import {
   CamapaignTypes,
