@@ -76,3 +76,14 @@ export interface Condition {
   segment_filter?: filter[];
   attrubute_filter?: filter[];
 }
+
+export interface snsTopic {
+  arn: string | null;
+  error: string;
+}
+
+export interface snsTopicConfig {
+  sms: snsTopic;
+  email: snsTopic;
+  slack: snsTopic;
+}
