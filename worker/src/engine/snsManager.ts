@@ -31,48 +31,38 @@ export class Publisher {
   }
 
   async sendToSns(topic, body) {
-    if (!topic || !body) throw new Error("SNS Topic or body is invalid");
+    if (!topic || !body) {
+      throw new Error("SNS Topic or body is invalid");
+    }
 
-    switch (topic) {
-      case "sms":
-        const command_sms = this.publishCommandWrapper(
-          this.arn_topic_container.sms,
-          body
-        );
-        try {
-          const response_sms_send = await this.client.send(command_sms);
-          console.log("SNS Message ID:", response_sms_send.MessageId);
-        } catch (e) {
-          throw new Error("Failed send sms");
-        }
-        break;
-      case "email":
-        const command_email = this.publishCommandWrapper(
-          this.arn_topic_container.email,
-          body
-        );
-        try {
-          const response_email_send = await this.client.send(command_email);
-          console.log("SNS Message ID:", response_email_send.MessageId);
-        } catch (e) {
-          throw new Error("Failed send email");
-        }
-        break;
-      case "slack":
-        const command_slack = this.publishCommandWrapper(
-          this.arn_topic_container.slack,
-          body
-        );
+    const topicConfig = {
+      sms: {
+        arn: this.arn_topic_container.sms,
+        error: "Failed send sms",
+      },
+      email: {
+        arn: this.arn_topic_container.email,
+        error: "Failed send email",
+      },
+      slack: {
+        arn: this.arn_topic_container.slack,
+        error: "Failed send slack message",
+      },
+    };
 
-        try {
-          const response_slack_send = await this.client.send(command_slack);
-          console.log("SNS Message ID:", response_slack_send.MessageId);
-        } catch (e) {
-          throw new Error("Failed send slack message");
-        }
-        break;
-      default:
-        throw new Error(`Unsupported topic: ${topic}`);
+    const config = topicConfig[topic];
+
+    if (!config) {
+      throw new Error(`Unsupported topic: ${topic}`);
+    }
+
+    const command = this.publishCommandWrapper(config.arn, body);
+
+    try {
+      const response = await this.client.send(command);
+      console.log("SNS Message ID:", response.MessageId);
+    } catch (e) {
+      throw new Error(config.error);
     }
   }
 
