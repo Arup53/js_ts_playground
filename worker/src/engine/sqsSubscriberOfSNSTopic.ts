@@ -1,4 +1,8 @@
-import { DeleteMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+import {
+  DeleteMessageCommand,
+  ReceiveMessageCommand,
+  SQSClient,
+} from "@aws-sdk/client-sqs";
 
 class sqsConsumerOfSNSTopic {
   private reigon: string | null;
@@ -43,5 +47,48 @@ class sqsConsumerOfSNSTopic {
   }
   async processMessage(message) {
     console.log("Processing email:", message);
+    return message;
+  }
+
+  async pollQueue() {
+    console.log("Starting SQS consumer, polling...");
+
+    while (true) {
+      const response = await this.client.send(
+        new ReceiveMessageCommand({
+          QueueUrl: this.sqs_url_for_sns!,
+          MaxNumberOfMessages: 10,
+          WaitTimeSeconds: 20,
+          VisibilityTimeout: 30,
+        })
+      );
+
+      const messages = response.Messages ?? [];
+
+      if (messages.length === 0) {
+        console.log("No messages, waiting...");
+        continue;
+      }
+
+      for (const sqsMessage of messages) {
+        const emailMessage = this.parseSNSEnvelope(sqsMessage);
+
+        if (!emailMessage) {
+          // Delete malformed messages so they don't block the queue
+          await this.deleteMessage(sqsMessage.ReceiptHandle!);
+          continue;
+        }
+
+        try {
+          await this.processMessage(emailMessage);
+          // Only delete AFTER successful processing
+          await this.deleteMessage(sqsMessage.ReceiptHandle!);
+          console.log("Message processed and deleted:", sqsMessage.MessageId);
+        } catch (err) {
+          // Don't delete — let it retry or go to DLQ
+          console.error("Processing failed, message will retry:", err);
+        }
+      }
+    }
   }
 }
