@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import Publisher from "./engine/publisher";
+import Publisher from "./engine/snsManager";
 import CampaignService from "./engine/services/campaignService";
 import Engine from "./engine/engine";
 import SQSManager from "./sqsManager";
