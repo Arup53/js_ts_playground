@@ -1,4 +1,4 @@
-import { SQSClient } from "@aws-sdk/client-sqs";
+import { DeleteMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 
 class sqsConsumerOfSNSTopic {
   private reigon: string | null;
@@ -26,12 +26,19 @@ class sqsConsumerOfSNSTopic {
   parseSNSEnvelope(sqsMessage) {
     try {
       const snsEnvelope = JSON.parse(sqsMessage.Body!);
-      // If RawMessageDelivery is false (default), SNS wraps in envelope
       const innerMessage = JSON.parse(snsEnvelope.Message);
       return innerMessage;
     } catch (err) {
       console.error("Failed to parse message:", err);
       return null;
     }
+  }
+  async deleteMessage(receiptHandle: string): Promise<void> {
+    await this.client.send(
+      new DeleteMessageCommand({
+        QueueUrl: this.sqs_url_for_sns!,
+        ReceiptHandle: receiptHandle,
+      })
+    );
   }
 }
