@@ -77,13 +77,13 @@ export interface Condition {
   attrubute_filter?: filter[];
 }
 
-export interface snsTopic {
+export interface SNSTopic {
   arn: string | null;
   error: string;
 }
 
-export interface snsTopicConfig {
-  sms: snsTopic;
-  email: snsTopic;
-  slack: snsTopic;
+export interface SNSTopicConfig {
+  sms: SNSTopic;
+  email: SNSTopic;
+  slack: SNSTopic;
 }
