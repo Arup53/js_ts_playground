@@ -77,6 +77,8 @@ export interface Condition {
   attrubute_filter?: filter[];
 }
 
+export type SNSTopicType = "sms" | "email" | "slack";
+
 export interface SNSTopic {
   arn: string | null;
   error: string;

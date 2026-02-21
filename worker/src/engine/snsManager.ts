@@ -1,5 +1,5 @@
 import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
-import type { snsTopic, snsTopicConfig } from "./types/types";
+import type { SNSTopic, SNSTopicConfig, SNSTopicType } from "./types/types";
 
 export class Publisher {
   private client;
@@ -31,12 +31,12 @@ export class Publisher {
     }
   }
 
-  async sendToSNS(topic, body) {
+  async sendToSNS(topic: SNSTopicType, body) {
     if (!topic || !body) {
       throw new Error("SNS Topic or body is invalid");
     }
 
-    const topicConfig: snsTopicConfig = {
+    const topicConfig: SNSTopicConfig = {
       sms: {
         arn: this.arn_topic_container.sms!,
         error: "Failed send sms",
@@ -51,7 +51,7 @@ export class Publisher {
       },
     };
 
-    const config: snsTopic = topicConfig[topic];
+    const config: SNSTopic = topicConfig[topic];
 
     if (!config) {
       throw new Error(`Unsupported topic: ${topic}`);
