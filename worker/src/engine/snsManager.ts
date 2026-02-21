@@ -24,7 +24,7 @@ export class Publisher {
     console.log("message is ", parsed_message);
 
     try {
-      const response = await this.sendToSns(channel, parsed_message);
+      const response = await this.sendToSNS(channel, parsed_message);
       console.log(response);
     } catch (e) {
       throw new Error(`publish method failed to send`);
