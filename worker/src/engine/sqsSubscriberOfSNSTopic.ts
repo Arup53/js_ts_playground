@@ -41,4 +41,10 @@ class sqsConsumerOfSNSTopic {
       })
     );
   }
+  async processMessage(message) {
+    console.log("Processing email:");
+    console.log("  To:", message.to);
+    console.log("  Subject:", message.subject);
+    console.log("  Body:", message.body);
+  }
 }
