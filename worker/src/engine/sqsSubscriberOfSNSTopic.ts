@@ -91,3 +91,12 @@ export class sqsConsumerOfSNSTopic {
     }
   }
 }
+
+// async function Test() {
+//   const sqs_consumer = new sqsConsumerOfSNSTopic();
+
+//   const res = await sqs_consumer.pollQueue();
+//   console.log(res);
+// }
+
+// Test();
