@@ -3,7 +3,7 @@ import Redis from "ioredis";
 const client = new Redis.Cluster(
   [
     {
-      host: "clustercfg.redis-nodejs.trgjma.use1.cache.amazonaws.com",
+      host: process.env.ELASTICACHE_REDIS,
       port: 6379,
     },
   ],
