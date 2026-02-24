@@ -45,6 +45,15 @@ async function main() {
   };
   await campaignService.createCampaign(campaignObj1);
   await campaignService.createCampaign(campaignObj2);
+
+  const result = await campaignService.getCampaignsOfTenantByStatus(
+    58922,
+    true
+  );
+  console.log(result);
+
+  await campaignService.quit();
+  process.exit(0);
 }
 
 main();
