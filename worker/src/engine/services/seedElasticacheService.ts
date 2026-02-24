@@ -37,11 +37,11 @@ async function main() {
     actions: {
       action: [{ channel: Channel.sms, message: "Hello there" }],
     },
-    duration: "1th feb",
+    duration: "15 march",
     frequency: 1,
     entries_customers: {},
     active: true,
-    created_at: "30th march",
+    created_at: "1 march",
   };
   await campaignService.createCampaign(campaignObj1);
   await campaignService.createCampaign(campaignObj2);
