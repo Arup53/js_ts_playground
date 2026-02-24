@@ -6,7 +6,7 @@ import {
   type Campaign,
 } from "../types/types";
 
-class CacheService {
+export class CacheService {
   private client: Redis | Cluster | null;
   private isConnected: boolean;
   constructor() {
@@ -35,7 +35,7 @@ class CacheService {
       [
         {
           host: process.env.ELASTICACHE_REDIS,
-          port: 6379,
+          port: Number(process.env.REDIS_PORT!),
         },
       ],
       {
@@ -72,7 +72,7 @@ class CacheService {
 
     const key = this._campaignKey(campaign.campaign_id);
 
-    const res = await this.client?.hSet(key, {
+    const res = await this.client?.hset(key, {
       id: campaign.campaign_id.toString(),
       tenant_id: campaign.tenant_id.toString(),
       campaign_name: campaign.campaign_name,
@@ -94,7 +94,7 @@ class CacheService {
     }
     const key = this._tenantCampaignsByStatusIndexKey(tenant_id, status);
 
-    await this.client?.sAdd(key, campaign_id.toString());
+    await this.client?.sadd(key, campaign_id.toString());
   }
 
   // ------------------- Get all campaign by active status ---------
@@ -105,7 +105,7 @@ class CacheService {
     let results = [];
     const indexKey = this._tenantCampaignsByStatusIndexKey(tenant_id, status);
     console.log("indexKey", indexKey);
-    const campaignIds = await this.client?.sMembers(indexKey)!;
+    const campaignIds = await this.client?.smembers(indexKey)!;
     console.log(campaignIds);
     if (campaignIds.length === 0) return "Error, no campaigns ids";
     try {
@@ -113,7 +113,7 @@ class CacheService {
         const campaignKey = this._campaignKey(campaignId);
         console.log("campaign key in cacheservice", campaignKey);
         console.log(typeof campaignKey);
-        const unstructred_res = await this.client?.hGetAll(campaignKey)!;
+        const unstructred_res = await this.client?.hgetall(campaignKey)!;
 
         const res = { ...unstructred_res };
 
@@ -164,18 +164,18 @@ class CacheService {
     );
 
     // ---- change campaign status field in set----
-    const campaignIds = await this.client?.sMembers(indexKeyCurrent)!;
+    const campaignIds = await this.client?.smembers(indexKeyCurrent)!;
     const camapignIdToDelete = campaignIds.find((key) => {
       if (key === campaign_id) {
         return key;
       }
     });
     if (camapignIdToDelete) {
-      const deleteRes = await this.client?.sRem(
+      const deleteRes = await this.client?.srem(
         indexKeyCurrent,
         camapignIdToDelete
       );
-      const newStatus = await this.client?.sAdd(
+      const newStatus = await this.client?.sadd(
         indexKeyNew,
         camapignIdToDelete
       );
@@ -184,7 +184,7 @@ class CacheService {
     }
     // ---- change campaign status field in hashmap----
     const camapaignKey = this._campaignKey(campaign_id);
-    const result = await this.client?.hSet(camapaignKey, {
+    const result = await this.client?.hset(camapaignKey, {
       active: new_status,
     });
     return "Success";
