@@ -1,4 +1,4 @@
-import { createClient, type RedisClientType } from "redis";
+import Redis, { Cluster } from "ioredis";
 import {
   CamapaignTypes,
   Channel,
@@ -7,7 +7,7 @@ import {
 } from "../types/types";
 
 class CacheService {
-  private client: RedisClientType | null;
+  private client: Redis | Cluster | null;
   private isConnected: boolean;
   constructor() {
     this.client = null;
@@ -31,9 +31,20 @@ class CacheService {
   async connect() {
     if (this.isConnected) return;
 
-    this.client = createClient({
-      url: "redis://localhost:6379",
-    });
+    this.client = new Redis.Cluster(
+      [
+        {
+          host: process.env.ELASTICACHE_REDIS,
+          port: 6379,
+        },
+      ],
+      {
+        dnsLookup: (address, callback) => callback(null, address),
+        redisOptions: {
+          tls: {},
+        },
+      }
+    );
 
     this.client.on("error", (err) => {
       console.log("Redis connection error", err);
