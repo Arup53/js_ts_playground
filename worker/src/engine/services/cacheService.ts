@@ -53,7 +53,7 @@ export class CacheService {
       this.connecting = false;
     });
 
-    await this.client.connect();
+    // await this.client.connect(); not needed when using ioredis because it instanly calls when an new instance is created
     this.isConnected = true;
     this.connecting = false;
     console.log("Publisher connected to Redis");
