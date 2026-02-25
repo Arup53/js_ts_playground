@@ -65,10 +65,6 @@ export class CacheService {
   }
 
   async addCampaignToCache(campaign) {
-    if (!this.isConnected) {
-      await this.connect();
-    }
-
     if (!campaign) {
       return "Error, Invalid Arguments";
     }
