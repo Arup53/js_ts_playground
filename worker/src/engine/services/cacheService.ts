@@ -23,9 +23,7 @@ export class CacheService {
   }
 
   connectStatus() {
-    if (!this.isConnected) {
-      return false;
-    }
+    return this.isConnected; // return a proper boolean
   }
 
   async connect() {
@@ -45,7 +43,7 @@ export class CacheService {
         },
       }
     );
-
+    console.log("redis is connected", this.client);
     this.client.on("error", (err) => {
       console.log("Redis connection error", err);
       this.isConnected = false;
