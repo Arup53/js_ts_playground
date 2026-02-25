@@ -88,9 +88,6 @@ export class CacheService {
   }
 
   async addToTenantIndex(tenant_id, status, campaign_id) {
-    if (!this.isConnected) {
-      await this.connect();
-    }
     const key = this._tenantCampaignsByStatusIndexKey(tenant_id, status);
 
     await this.client?.sadd(key, campaign_id.toString());
