@@ -9,6 +9,7 @@ import {
 export class CacheService {
   private client: Redis | Cluster | null;
   private isConnected: boolean;
+  private connecting: boolean = false;
   constructor() {
     this.client = null;
     this.isConnected = false;
@@ -27,7 +28,9 @@ export class CacheService {
   }
 
   async connect() {
-    if (this.isConnected) return;
+    if (this.isConnected || this.connecting) return;
+
+    this.connecting = true;
 
     this.client = new Redis.Cluster(
       [
@@ -43,15 +46,17 @@ export class CacheService {
         },
       }
     );
-    console.log("redis is connected", this.client);
+
     this.client.on("error", (err) => {
       console.log("Redis connection error", err);
       this.isConnected = false;
+      this.connecting = false;
     });
 
     await this.client.connect();
     this.isConnected = true;
-    console.log("Publisher conencted to Redis");
+    this.connecting = false;
+    console.log("Publisher connected to Redis");
   }
 
   async closeConnection() {
