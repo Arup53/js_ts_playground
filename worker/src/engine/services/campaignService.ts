@@ -1,7 +1,7 @@
 // createCampaign, getCampaignsByStatus,updateCampaign
 
 import type { Campaign } from "../types/types";
-import { cacheService } from "./cacheService";
+import { CacheService, cacheService } from "./cacheService";
 
 class CampaignService {
   async init() {
