@@ -1,5 +1,3 @@
-// createCampaign, getCampaignsByStatus,updateCampaign
-
 import type { Campaign } from "../types/types";
 import { CacheService, cacheService } from "./cacheService";
 
