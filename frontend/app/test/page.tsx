@@ -1,51 +1,66 @@
 "use client";
-import { useState, useCallback } from "react";
+
+import { useCallback } from "react";
 import {
-  ReactFlow,
-  applyNodeChanges,
-  applyEdgeChanges,
-  addEdge,
   Background,
+  Connection,
+  Controls,
+  ReactFlow,
+  ReactFlowProvider,
+  addEdge,
+  useEdgesState,
+  useNodesState,
 } from "@xyflow/react";
+
 import "@xyflow/react/dist/style.css";
 
+import { Sidebar } from "../components/workflow_builder/sidebar/Sidebar";
+import { DnDProvider } from "../hooks/workflow/dnd/useDnD";
+
 const initialNodes = [
-  { id: "n1", position: { x: 0, y: 0 }, data: { label: "Node 1" } },
-  { id: "n2", position: { x: 0, y: 100 }, data: { label: "Node 2" } },
+  {
+    id: "1",
+    type: "input",
+    data: { label: "input node" },
+    position: { x: 250, y: 5 },
+  },
 ];
-const initialEdges = [{ id: "n1-n2", source: "n1", target: "n2" }];
 
-export default function Test() {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+function DnDFlow() {
+  const [nodes, _, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const onNodesChange = useCallback(
-    (changes) =>
-      setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    []
-  );
-  const onEdgesChange = useCallback(
-    (changes) =>
-      setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    []
-  );
   const onConnect = useCallback(
-    (params) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     []
   );
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }} className="bg-white">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        fitView
-      >
-        <Background />
-      </ReactFlow>
+    <div className="dndflow">
+      <div className="reactflow-wrapper">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          fitView
+        >
+          <Controls />
+          <Background />
+        </ReactFlow>
+      </div>
+      <Sidebar />
     </div>
+  );
+}
+
+export default function page() {
+  return (
+    <ReactFlowProvider>
+      <DnDProvider>
+        <DnDFlow />
+      </DnDProvider>
+    </ReactFlowProvider>
   );
 }
