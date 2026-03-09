@@ -16,6 +16,11 @@ import "@xyflow/react/dist/style.css";
 
 import { Sidebar } from "../components/workflow_builder/sidebar/Sidebar";
 import { DnDProvider } from "../hooks/workflow/dnd/useDnD";
+import { MultiHandleNode } from "../components/nodes/customNode";
+
+const nodeTypes = {
+  multiHandle: MultiHandleNode,
+};
 
 const initialNodes = [
   {
@@ -44,6 +49,7 @@ function DnDFlow() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          nodeTypes={nodeTypes}
           fitView
         >
           <Controls />
