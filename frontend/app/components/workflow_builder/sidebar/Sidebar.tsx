@@ -73,6 +73,15 @@ export function Sidebar() {
         >
           Output Node
         </div>
+        <div
+          className="dndnode"
+          onPointerDown={(event) => {
+            setType("multiHandle");
+            onDragStart(event, createAddNewNode("multiHandle"));
+          }}
+        >
+          Multi Handle Node
+        </div>
       </aside>
     </>
   );
