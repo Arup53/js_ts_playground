@@ -63,7 +63,7 @@ export const useDnD = () => {
 
   // This callback will be returned by the `useDnD` hook, and can be used in your UI,
   // when you want to start dragging a node into the flow.
-  // For example, this is used in the `Sidebar` component.
+  // For example, this is used in the `handle` component.
   const onDragStart = useCallback(
     (event: React.PointerEvent<HTMLDivElement>, onDrop: OnDropAction) => {
       event.preventDefault();
