@@ -50,6 +50,7 @@ function DnDFlow() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
+          defaultEdgeOptions={{ type: "step" }}
           fitView
         >
           <Controls />
