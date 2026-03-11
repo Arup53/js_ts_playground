@@ -39,9 +39,16 @@ function DnDFlow() {
   const activeNode = useWorkflowStore((s) => s.activeNode);
   const setActiveNode = useWorkflowStore((s) => s.setActiveNode);
 
-  const onNodeClick = useCallback((event, node) => {
-    setActiveNode(node.id);
-  }, []);
+  const onNodeClick = useCallback(
+    (event, node) => {
+      setActiveNode(node.id);
+    },
+    [setActiveNode]
+  );
+
+  const onPaneClick = useCallback(() => {
+    setActiveNode(null); // close inspector
+  }, [setActiveNode]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -58,6 +65,7 @@ function DnDFlow() {
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onNodeClick={onNodeClick}
+          onPaneClick={onPaneClick}
           nodeTypes={nodeTypes}
           defaultEdgeOptions={{ type: "step" }}
           fitView
