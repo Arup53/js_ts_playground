@@ -35,7 +35,7 @@ const initialNodes = [
 function DnDFlow() {
   const [nodes, _, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
+  const activeNode = useWorkflowStore((s) => s.activeNode);
   const setActiveNode = useWorkflowStore((s) => s.setActiveNode);
 
   const onNodeClick = useCallback((event, node) => {
@@ -65,7 +65,10 @@ function DnDFlow() {
           <Background />
         </ReactFlow>
       </div>
-      <Sidebar />
+      <div className="right-panel">
+        {!activeNode && <Sidebar />}
+        {activeNode && <InspectorPanel />}
+      </div>
     </div>
   );
 }
