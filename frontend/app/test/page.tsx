@@ -17,6 +17,7 @@ import "@xyflow/react/dist/style.css";
 import { Sidebar } from "../components/workflow_builder/sidebar/Sidebar";
 import { DnDProvider } from "../hooks/workflow/dnd/useDnD";
 import { MultiHandleNode } from "../components/nodes/customNode";
+import { useWorkflowStore } from "../store/workflow/useWorkflow";
 
 const nodeTypes = {
   multiHandle: MultiHandleNode,
@@ -35,6 +36,12 @@ function DnDFlow() {
   const [nodes, _, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
+  const setActiveNode = useWorkflowStore((s) => s.setActiveNode);
+
+  const onNodeClick = useCallback((event, node) => {
+    setActiveNode(node.id);
+  }, []);
+
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     []
@@ -49,6 +56,7 @@ function DnDFlow() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           defaultEdgeOptions={{ type: "step" }}
           fitView
