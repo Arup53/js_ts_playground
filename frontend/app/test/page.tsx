@@ -66,10 +66,10 @@ function DnDFlow() {
           <Background />
         </ReactFlow>
       </div>
-      <div className="right-panel">
+      <>
         {!activeNode && <Sidebar />}
         {activeNode && <InspectorPanel />}
-      </div>
+      </>
     </div>
   );
 }
