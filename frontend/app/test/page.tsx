@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import {
   Background,
+  BackgroundVariant,
   Connection,
   Controls,
   ReactFlow,
@@ -56,7 +57,7 @@ function DnDFlow() {
   );
 
   return (
-    <div className="dndflow">
+    <div className="dndflow ">
       <div className="reactflow-wrapper">
         <ReactFlow
           nodes={nodes}
@@ -70,13 +71,18 @@ function DnDFlow() {
           defaultEdgeOptions={{ type: "step" }}
           fitView
         >
-          <Controls />
           <Background />
+          <Controls />
         </ReactFlow>
       </div>
       <>
         {!activeNode && <Sidebar />}
         {activeNode && <InspectorPanel />}
+        <Background
+          color="#ccc"
+          bgColor="#f7f9fb"
+          variant={BackgroundVariant.Dots}
+        />
       </>
     </div>
   );
