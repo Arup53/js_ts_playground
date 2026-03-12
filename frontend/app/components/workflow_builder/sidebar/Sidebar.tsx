@@ -42,7 +42,7 @@ export function Sidebar() {
     <>
       {/* The ghost node will be rendered at pointer position when dragging. */}
       {isDragging && <DragGhost type={type} />}
-      <aside>
+      <aside className="border-2 border-red-600 h-64 bg-white">
         <div className="description">
           You can drag these nodes to the pane to create new nodes.
         </div>
