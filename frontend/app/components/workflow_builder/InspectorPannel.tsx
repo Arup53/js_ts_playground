@@ -1,12 +1,13 @@
+"use client";
 import { useWorkflowStore } from "@/app/store/workflow/useWorkflow";
 import { useReactFlow } from "@xyflow/react";
 
-function InspectorPanel() {
+export default function InspectorPanel() {
   const activeNode = useWorkflowStore((s) => s.activeNode);
   const nodes = useReactFlow().getNodes();
 
   const node = nodes.find((n) => n.id === activeNode);
-
+  console.log(node);
   return (
     <div>
       <h3>Inspector</h3>
